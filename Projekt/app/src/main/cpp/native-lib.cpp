@@ -87,8 +87,18 @@ JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Ini(
         JNIEnv *env,
         jobject /* this */) {
-
-
+}
+JNIEXPORT void JNICALL
+Java_com_example_projekt_MainActivity_Trajectory(
+        JNIEnv *env,
+        jobject /* this */,
+        jstring fp
+        ) {
+    const char* SDpath = env->GetStringUTFChars(fp, 0);
+    std::string temp = SDpath;
+    temp += "/trajectory.txt";
+    Trajectory traj = trajectoryGenerator(temp);
+    env->ReleaseStringUTFChars(fp, SDpath);
 }
 JNIEXPORT jstring JNICALL
         Java_com_example_projekt_MainActivity_Update(

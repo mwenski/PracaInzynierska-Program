@@ -2,6 +2,7 @@ package com.example.projekt;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.TextView;
 import android.os.Handler;
 import android.os.Message;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //getExternalStorageDirectory();
+        Trajectory(Environment.getExternalStorageDirectory().getPath());
         Ini();
         mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
     }
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String Update();
+    public native void Trajectory(String fp);
     public native void Ini();
 
     // Used to load the 'native-lib' library on application startup.
