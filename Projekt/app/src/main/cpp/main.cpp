@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <vector>
 #include <fstream>
+#include <iostream>
 #include <GLES2/gl2.h>
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -21,7 +22,10 @@ JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Ini(
         JNIEnv *env,
 jobject /* this */) {
-initialization(0x01);
+initialization_acceleration(0x01);
+initialization_gyroscope(0x01);
+initialization_rotation(0x01);
+initialization_magnetic(0x01);
 }
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Trajectory(
@@ -38,13 +42,42 @@ env->ReleaseStringUTFChars(fp, SDpath);
 JNIEXPORT jstring JNICALL
 Java_com_example_projekt_MainActivity_Update(
         JNIEnv *env,
-        jobject /* this */
+        jobject /* this */,
+        jint i
 )
 {
-    glm::vec3 rv = accelGet();
-    std::string helper = "Hi your accelerometer reads (x,y,z) "+ std::to_string(rv.x) + " " + std::to_string(rv.y) + " "+ std::to_string(rv.z);
-    return env->NewStringUTF(helper.c_str());
+    switch(i){
+        case 1:{
+        glm::vec3 rv = accelGet1();
+        std::string helper = "Hi your accelerometer reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
+                             + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
+            return env->NewStringUTF(helper.c_str());
+        }
+        case 2:{
+            glm::vec3 rv = accelGet2();
+            std::string helper = "Hi your gyroscope reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
+                                 + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
+            return env->NewStringUTF(helper.c_str());
+        }
+        case 3:{
+            glm::vec3 rv = accelGet3();
+            std::string helper = "Hi your rotation vector reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
+                                 + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
+            return env->NewStringUTF(helper.c_str());
+        }
+        case 4:{
+            glm::vec3 rv = accelGet4();
+            std::string helper = "Hi your magnetic field reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
+                                 + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
+            return env->NewStringUTF(helper.c_str());
+        }
+        default:{
+            std::string helper = "switch wyszedł poza zakres";
+            return env->NewStringUTF(helper.c_str());
+        }
 
+    }
 }
+
 
 }
