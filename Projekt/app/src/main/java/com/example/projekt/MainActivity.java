@@ -8,15 +8,23 @@ import android.os.Handler;
 import android.os.Message;
 public class MainActivity extends AppCompatActivity {
     private static final int DISPLAY_DATA = 1;
-    private static TextView tv;
+    private static TextView tv[]=new TextView[4];
     private static int hr = 0;
     // this handler will receive a delayed message
     private Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == DISPLAY_DATA)  tv = findViewById(R.id.sample_text);
-            tv.setText(Update());
+            if (msg.what == DISPLAY_DATA){
+                tv[0] = findViewById(R.id.sample_text1);
+                tv[1]= findViewById(R.id.sample_text2);
+                tv[2] = findViewById(R.id.sample_text3);
+                tv[3] = findViewById(R.id.sample_text4);
+            }
+            tv[0].setText(Update(1));
+            tv[1].setText(Update(2));
+            tv[2].setText(Update(3));
+            tv[3].setText(Update(4));
             mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
         }
     };
@@ -34,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    public native String Update();
+    public native String Update(int i);
     public native void Trajectory(String fp);
     public native void Ini();
 
