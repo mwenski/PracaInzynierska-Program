@@ -170,9 +170,9 @@ glm::vec3 accelGet3()//rotation
                             event.vector.x, event.vector.y,
                             event.vector.z);
 
-        rv.x = event.vector.x;//nie zwraca stopni nie wiem jak zrobić żeby liczyło w stipniach
-        rv.y = event.vector.y;
-        rv.z = event.vector.z;
+        rv.x = asin(event.vector.x)*2*180/M_PI;
+        rv.y = asin(event.vector.y)*2*180/M_PI;
+        rv.z = asin(event.vector.z)*2*180/M_PI;
     }
     return rv;
 }
