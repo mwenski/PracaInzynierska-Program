@@ -22,6 +22,7 @@
 #include <camera/NdkCaptureRequest.h>
 #include <camera/NdkCameraManager.h>
 #include "sensor.h"
+#include <cmath>
 #define accelFlag 0x01
 //#include <experimental/filesystem>
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "MainActivity", __VA_ARGS__))
