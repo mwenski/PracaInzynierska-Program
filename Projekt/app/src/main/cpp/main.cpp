@@ -23,6 +23,8 @@ Java_com_example_projekt_MainActivity_Ini(
         JNIEnv *env,
 jobject /* this */) {
     initialization_manager(); //zawsze na początku
+   const char *b = getSensorList().c_str();
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);
 initialization_acceleration(0x01);
 initialization_gyroscope(0x01);
 initialization_rotation(0x01);

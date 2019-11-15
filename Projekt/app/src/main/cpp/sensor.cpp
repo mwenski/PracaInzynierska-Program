@@ -34,7 +34,23 @@
 ASensorEventQueue *eventQ[4];
 char initFlags = 0x00;
 ASensorManager *sensorManager;
+std::string getSensorList()
+{
+    ASensorList list;
+    std::string a = "Sensor count = ";
+   int sensor_count = ASensorManager_getSensorList(sensorManager,&list);
+    a+= std::to_string(sensor_count);
+    a+= "\r\n";
+    for(int i = 0 ; i<sensor_count;i++)
+    {
+        a += ASensor_getName(list[i]) ;
+        a += " sampling rate (hz): ";
+        a +=  std::to_string(1000000.0/ASensor_getMinDelay(list[i]));
+        a += "\r\n";
+    }
 
+return  a;
+}
 void initialization_manager()
 {
     sensorManager = ASensorManager_getInstance();      // referencja do obiektu managera
@@ -130,7 +146,7 @@ glm::vec3 accelGet()//accelerator
     }//odbieramy event
         __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
                             event.acceleration.x, event.acceleration.y,
-                            event.acceleration.z); 
+                            event.acceleration.z);
         rv.x = event.acceleration.x;
         rv.y = event.acceleration.y;
         rv.z = event.acceleration.z;
