@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             tv[1].setText(Update(2));
             tv[2].setText(Update(3));
             tv[3].setText(Update(4));
-            mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
+            mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 50);
         }
     };
     @Override
