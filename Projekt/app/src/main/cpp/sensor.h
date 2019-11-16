@@ -1,10 +1,8 @@
-//
-// Created by John on 19/10/29.
-//
 
 #ifndef PROJEKT_SENSOR_H
 #define PROJEKT_SENSOR_H
 //#include <GLES2/gl2.h>
+#include<string>
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
