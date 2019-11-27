@@ -16,6 +16,7 @@
 #include "glm/vec3.hpp"
 #include"config.h"
 #include"sensor.h"
+#include"calibration.h"
 #include"trajectory.h"
 extern "C" {
 JNIEXPORT void JNICALL
@@ -25,6 +26,17 @@ jobject /* this */) {
     initialization_manager(); //zawsze na początku
    const char *b = getSensorList().c_str();
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);
+    Matrice4 al;
+    al.cell[0][0] = 1;
+    al.cell[1][1] = 1;
+    al.cell[2][2] = 1;
+    al.cell[3][3] = 1;
+    Vector4 der(2,3,4);
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der.x,der.y,der.z);
+    der = al*der;
+    Vector4 das = der;
+    der.x = das.y;//3
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der.x,der.y,der.z);
 initialization_acceleration(0x01);
 initialization_gyroscope(0x01);
 initialization_rotation(0x01);

@@ -3,23 +3,24 @@
 //
 #include"sensor.h"
 #include"calibration.h"
+
 Six_state::Six_state() {
 zero();
 }
 void Six_state::zero() {
     for (int i = 0; i < 3; i++) {
-        xyz[i] = glm::vec3(0, 0, 0);
-        rxyz[i] = glm::vec3(0, 0, 0);
+        xyz[i] = Vector4(0, 0, 0);
+        rxyz[i] = Vector4(0, 0, 0);
     }
 }
 void Reading::setOffsetAsCurrent(){
-    offset = glm::vec3(-val.x, -val.y, -val.z);
+    offset = Vector4(-val.x, -val.y, -val.z);
 };
-void  Reading::setOffset(glm::vec3 a){
+void  Reading::setOffset(Vector4 a){
     offset = a;
 };
-glm::vec3 Reading::getWithOffset() {
-   return glm::vec3(val.x + offset.x, val.y + offset.y, val.z + offset.z);
+Vector4 Reading::getWithOffset() {
+   return Vector4(val.x + offset.x, val.y + offset.y, val.z + offset.z);
 }
 Reading::Reading()
 {
@@ -27,6 +28,6 @@ Reading::Reading()
 }
 void Reading::zero()
 {
-    val = glm::vec3(0,0,0);
-    val = glm::vec3(0,0,0);
+    val = Vector4(0,0,0);
+    val = Vector4(0,0,0);
 }
