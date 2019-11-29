@@ -51,7 +51,8 @@ jstring fp
 const char* SDpath = env->GetStringUTFChars(fp, 0);
 std::string temp = SDpath;
 temp += "/trajectory.txt";
-Trajectory traj = trajectoryGenerator(temp);
+//Trajectory traj = trajectoryGenerator(temp);
+setAttributes(x,0,0,0,1,1);
 env->ReleaseStringUTFChars(fp, SDpath);
 }
 JNIEXPORT jstring JNICALL

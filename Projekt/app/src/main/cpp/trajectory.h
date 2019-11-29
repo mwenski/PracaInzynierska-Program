@@ -9,10 +9,8 @@
 struct Point{
     float x[3],y[3],z[3];
 };
-
-struct Trajectory{
-    std::vector<Point> coordinates;
-    float step;
-};
-Trajectory trajectoryGenerator(std::string fileName);
+enum AtrHelper{x=0,y=1,z=2};
+void setAttributes(AtrHelper xyz, float x4,float x3,float x2,float x1,float x0);
+Point getCT(float t);
+float getPoly(float x4,float x3,float x2,float x1,float x0,float t);
 #endif //PROJEKT_TRAJECTORY_H

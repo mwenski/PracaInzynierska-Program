@@ -12,40 +12,26 @@
 #include "glm/gtx/rotate_vector.hpp"
 #include "glm/gtx/closest_point.hpp"
 #include "glm/vec3.hpp"
-Trajectory trajectoryGenerator(std::string fileName)
+float attributes[3][5] ={0}; //atrybuty dla wielomianu
+void setAttributes(AtrHelper xyz, float x4,float x3,float x2,float x1,float x0)//x=0,y=1,z=2
 {
-    std::ifstream fr;
-    fr.open(fileName);
-    Trajectory traj;
-    if(fr.failbit != std::ios_base::goodbit)
-        return traj;
-    std::string p;
-    fr>>p; //first line is delta T for whole trajector;
-    traj.step= atof(p.c_str());
-    while(!fr.eof())
-    {
-        fr>>p;
-        Point a;
-        int comf=p.find(',');
-        int coms = p.substr(comf).find(',');
-        a.x[0]=atof(p.substr(0,comf).c_str());
-        a.y[0]=atof(p.substr(comf,comf-coms).c_str());
-        a.z[0]=atof(p.substr(coms).c_str());
-        traj.coordinates.push_back(a);
-    }
+        attributes[xyz][0] = x4;
+        attributes[xyz][1] = x3;
+        attributes[xyz][2] = x2;
+        attributes[xyz][3] = x1;
+        attributes[xyz][4] = x0;
 
-    for(int i = 0;i<traj.coordinates.size();i++) { //filling first and second delta
-        if(i!=0) {
-            traj.coordinates[i-1].x[1] = traj.coordinates[i].y[0] - traj.coordinates[i-1].y[0];
-            traj.coordinates[i-1].y[1] = traj.coordinates[i].y[0] - traj.coordinates[i-1].y[0];
-            traj.coordinates[i-1].z[1] = traj.coordinates[i].z[0] - traj.coordinates[i-1].z[0];
-        }
-        if(i!=1)
-        {
-            traj.coordinates[i-2].x[2] = traj.coordinates[i-1].y[1] - traj.coordinates[i-2].y[1];
-            traj.coordinates[i-2].y[2] = traj.coordinates[i-1].y[1] - traj.coordinates[i-2].y[1];
-            traj.coordinates[i-2].z[2] = traj.coordinates[i-1].z[1] - traj.coordinates[i-2].z[1];
-        }
-    }
-    return traj;
+}
+float getPoly(float x4,float x3,float x2,float x1,float x0,float t) //oblicz wielomian z argumentem t x4*t^4...
+{
+    return (((x4*t)*t + x3*t)*t + x2*t)*t + x1*t + x0;
+}
+Point getCT(float t)
+{
+    Point a;
+    //kod zwraca obecny punkt trajektorii
+    a.x[0] = getPoly(attributes[0][0],attributes[0][1],attributes[0][2],attributes[0][3],attributes[0][4],t);
+    a.y[0] = getPoly(attributes[1][0],attributes[1][1],attributes[1][2],attributes[1][3],attributes[1][4],t);
+    a.z[0] = getPoly(attributes[2][0],attributes[2][1],attributes[2][2],attributes[2][3],attributes[2][4],t);
+    return a;
 }
