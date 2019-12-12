@@ -10,6 +10,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 add_subdirectory(glm)
+#add_subdirectory(arma)
 add_library( # Sets the name of the library.
              our-lib
              # Sets the library as a shared library.

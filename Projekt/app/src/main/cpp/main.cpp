@@ -18,6 +18,36 @@
 #include"sensor.h"
 #include"calibration.h"
 #include"trajectory.h"
+#include "control.h"
+#include <pthread.h>
+#include <time.h>
+//czas w ms
+static double now_ms(void) {
+
+    struct timespec res;
+    clock_gettime(CLOCK_REALTIME, &res);
+    return 1000.0 * res.tv_sec + (double) res.tv_nsec / 1e6;
+
+}
+//pentla regulacji
+void *perform_work(void *arguments) {
+
+    double tim = now_ms();
+
+    PID first = PID(1, 1, 1, 100);
+    float out = 0;
+    float u = 0;
+    while (1) {
+        while (now_ms() - tim < 100);
+        tim = now_ms();
+        u = first.run(1 - out);
+        out = accelGet().x;
+        __android_log_print(ANDROID_LOG_INFO, "MainActivity", "OUTPUT IS %f U IS %f", out,
+                            u);
+
+    }
+
+}
 extern "C" {
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Ini(
@@ -41,6 +71,9 @@ initialization_acceleration(0x01);
 initialization_gyroscope(0x01);
 initialization_rotation(0x01);
 initialization_magnetic(0x01);
+
+    pthread_t thread;
+    pthread_create(&thread, NULL, perform_work, nullptr);
 }
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Trajectory(
@@ -62,7 +95,7 @@ Java_com_example_projekt_MainActivity_Update(
         jint i
 )
 {
-    switch(i){
+    /*switch(i){
         case 1:{
         glm::vec3 rv = accelGet();
         std::string helper = "Hi your accelerometer reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
@@ -92,7 +125,9 @@ Java_com_example_projekt_MainActivity_Update(
             return env->NewStringUTF(helper.c_str());
         }
 
-    }
+    }*/
+    std::string helper = "switch wyszedł poza zakres";
+            return env->NewStringUTF(helper.c_str());
 }
 
 

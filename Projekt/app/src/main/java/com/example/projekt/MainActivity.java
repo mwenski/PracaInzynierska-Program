@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //Trajectory(Environment.getExternalStorageDirectory().getPath());
         Ini();
-        mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
+        //mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
     }
 
     /**

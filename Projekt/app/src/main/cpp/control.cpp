@@ -10,7 +10,7 @@ PID::PID(float p, float i, float d, float t)
     Kd=d;
     T=t;
 }
-void PID::setParams(float p, float i, float d, float t)
+void PID::setParams(float p, float i, float d, double t)
 {
     Kp=p;
     Ki=i;
@@ -25,8 +25,22 @@ void PID::clearMemory()
 float PID::run(float in){
 
     float ret;
-    memi+= in*T;
-    ret = memi*Ki + in*Kp + ((in-memd)/T)*Kd;
+    memi+= in*(T/1000);
+    ret = memi*Ki + in*Kp + ((in-memd)/(T/1000))*Kd;
     memd = in;
     return ret;
+}
+
+LObserver::LObserver(float l, float x, float b, float c, float d)
+{
+    L=l;
+    X=x;
+    B=b;
+    C=c;
+    D=d;
+}
+void LObserver::predict(float u, float y)
+{
+    xhat = X*xhat + B*u + L*(y-yhat);
+    yhat = C*xhat + D*u;
 }
