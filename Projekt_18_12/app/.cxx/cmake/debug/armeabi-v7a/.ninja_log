@@ -1,0 +1,17 @@
+# ninja log v5
+20	437	598394126	CMakeFiles/our-lib.dir/config.cpp.o	a82e3c83b0723f0e
+13	464	598394126	CMakeFiles/our-lib.dir/control.cpp.o	986932654bb926d9
+17	1140	598394127	CMakeFiles/our-lib.dir/vectors.cpp.o	11fde60e6fd3f674
+438	2897	598394128	CMakeFiles/our-lib.dir/calibration.cpp.o	4fada26c0b130e77
+5	3710	598394129	CMakeFiles/our-lib.dir/trajectory.cpp.o	1e39d70458c8750b
+0	3932	598394130	CMakeFiles/our-lib.dir/sensor.cpp.o	e3fa93133bf28cb0
+9	3933	598394130	CMakeFiles/our-lib.dir/main.cpp.o	42f5d997dd12c994
+3933	4545	598394130	C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/build/intermediates/cmake/debug/obj/armeabi-v7a/libour-lib.so	eceadeb25a72acf7
+9	1830	598394293	CMakeFiles/our-lib.dir/main.cpp.o	42f5d997dd12c994
+1830	1991	598394294	C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/build/intermediates/cmake/debug/obj/armeabi-v7a/libour-lib.so	eceadeb25a72acf7
+23	288	598396267	CMakeFiles/our-lib.dir/control.cpp.o	986932654bb926d9
+20	328	598396267	CMakeFiles/our-lib.dir/config.cpp.o	a82e3c83b0723f0e
+16	1834	598396269	CMakeFiles/our-lib.dir/calibration.cpp.o	4fada26c0b130e77
+6	2546	598396270	CMakeFiles/our-lib.dir/sensor.cpp.o	e3fa93133bf28cb0
+12	2624	598396270	CMakeFiles/our-lib.dir/main.cpp.o	42f5d997dd12c994
+2625	2793	598396270	C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/build/intermediates/cmake/debug/obj/armeabi-v7a/libour-lib.so	eceadeb25a72acf7
