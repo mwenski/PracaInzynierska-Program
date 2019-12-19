@@ -2,6 +2,7 @@
 #ifndef PROJEKT_SENSOR_H
 #define PROJEKT_SENSOR_H
 //#include <GLES2/gl2.h>
+#include "vectors.h"
 #include<string>
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -15,8 +16,8 @@ void initialization_acceleration(char flags);
 void initialization_gyroscope(char flags);
 void initialization_rotation(char flags);
 void initialization_magnetic(char flags);
-glm::vec3 accelGet();
-glm::vec3 gyroGet();
-glm::vec3 rotationGet();
-glm::vec3 magneticGet();
+Vector4 accelGet();
+Vector4 gyroGet();
+Vector4 rotationGet();
+Vector4 magneticGet();
 #endif //PROJEKT_SENSOR_H

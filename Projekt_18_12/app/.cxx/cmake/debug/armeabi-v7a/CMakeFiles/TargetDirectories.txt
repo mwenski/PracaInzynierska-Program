@@ -1,5 +1,0 @@
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/our-lib.dir
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/rebuild_cache.dir
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/armeabi-v7a/glm/CMakeFiles/edit_cache.dir
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/armeabi-v7a/glm/CMakeFiles/rebuild_cache.dir

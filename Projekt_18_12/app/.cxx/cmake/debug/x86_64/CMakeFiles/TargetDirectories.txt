@@ -1,5 +1,0 @@
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/x86_64/CMakeFiles/our-lib.dir
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/x86_64/CMakeFiles/edit_cache.dir
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/x86_64/CMakeFiles/rebuild_cache.dir
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/x86_64/glm/CMakeFiles/edit_cache.dir
-C:/Users/Piotr Urbanowicz/AndroidStudioProjects/Projekt_18_12/app/.cxx/cmake/debug/x86_64/glm/CMakeFiles/rebuild_cache.dir

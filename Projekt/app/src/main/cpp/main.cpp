@@ -88,6 +88,13 @@ temp += "/trajectory.txt";
 setAttributes(x,0,0,0,1,1);
 env->ReleaseStringUTFChars(fp, SDpath);
 }
+
+extern struct Reading accel;
+extern struct Reading gyro;
+extern struct Reading rotation;
+extern struct Reading magnetic;
+extern struct Six_state dane;
+
 JNIEXPORT jstring JNICALL
 Java_com_example_projekt_MainActivity_Update(
         JNIEnv *env,
@@ -95,27 +102,35 @@ Java_com_example_projekt_MainActivity_Update(
         jint i
 )
 {
-    /*switch(i){
+    Vector4 rv;
+    switch(i){
         case 1:{
-        glm::vec3 rv = accelGet();
-        std::string helper = "Hi your accelerometer reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
-                             + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
+            accel.val=accelGet();
+            (button) ? (rv = accel.getWithOffset()) : (rv = accel.val);
+            std::string helper = "Hi your accelerometer reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
+                                 + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
         }
         case 2:{
-            glm::vec3 rv = gyroGet();
+            //odczyt();
+            gyro.val=gyroGet();
+            (button) ? (rv = gyro.getWithOffset()) : (rv = gyro.val);
             std::string helper = "Hi your gyroscope reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
         }
         case 3:{
-            glm::vec3 rv = rotationGet();
+            // read();
+
+            rotation.val=rotationGet();
+            (button) ? (rv = rotation.getWithOffset()) : (rv = rotation.val);
             std::string helper = "Hi your rotation vector reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
         }
         case 4:{
-            glm::vec3 rv = magneticGet();
+            magnetic.val=magneticGet();
+            (button) ? (rv = magnetic.getWithOffset()) : (rv = magnetic.val);
             std::string helper = "Hi your magnetic field reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
@@ -125,10 +140,25 @@ Java_com_example_projekt_MainActivity_Update(
             return env->NewStringUTF(helper.c_str());
         }
 
-    }*/
-    std::string helper = "switch wyszedł poza zakres";
-            return env->NewStringUTF(helper.c_str());
+    }
+   // std::string helper = "switch wyszedł poza zakres";
+    //        return env->NewStringUTF(helper.c_str());
 }
+JNIEXPORT void JNICALL
+Java_com_example_projekt_MainActivity_Calibration(
+        JNIEnv *env,
+        jobject /* this */){
+    button=1;
+    gyro.cal(1);
+    accel.cal(2);
+    rotation.cal(3);
+    magnetic.cal(4);
+}
+
+
+
+
+
 
 
 }
