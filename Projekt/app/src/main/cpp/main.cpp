@@ -132,7 +132,7 @@ Java_com_example_projekt_MainActivity_Update(
             magnetic.val=magneticGet();
             (button) ? (rv = magnetic.getWithOffset()) : (rv = magnetic.val);
             std::string helper = "Hi your magnetic field reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
-                                 + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
+                                 + std::to_string(rv.y) + " Z: " + std::to_string(odczytana);
             return env->NewStringUTF(helper.c_str());
         }
         default:{
@@ -155,7 +155,13 @@ Java_com_example_projekt_MainActivity_Calibration(
     magnetic.cal(4);
 }
 
-
+JNIEXPORT void JNICALL
+Java_com_example_projekt_MainActivity_load(
+        JNIEnv *env,
+        jobject /* this */,
+        jint a){
+ odczytana=a;
+}
 
 
 
