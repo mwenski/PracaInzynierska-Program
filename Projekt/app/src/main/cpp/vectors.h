@@ -11,6 +11,7 @@ struct Vector4{
     float& z = val[2];
     float& w = val[3];
     Vector4 operator+(Vector4 &a);
+    Vector4 operator/(int &a);
     Vector4& operator=(const Vector4 &other);
     Vector4(float x,float y,float z);
     Vector4();

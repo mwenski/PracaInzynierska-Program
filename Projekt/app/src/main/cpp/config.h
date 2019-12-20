@@ -7,5 +7,5 @@
 extern int config_variable_a;
 extern int sampling_rate;
 extern bool button;
-extern int odczytana;
+extern int gravitation;
 #endif //PROJEKT_CONFIG_H

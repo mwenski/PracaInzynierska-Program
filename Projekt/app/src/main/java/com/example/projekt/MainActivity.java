@@ -72,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
         return json;
     }
     public void load() {
-        int num;
+        int gravitation;
         //String name;
         try {
             JSONArray jArray = new JSONArray(readJSONFromAsset());
-           num=jArray.getJSONObject(0).getInt("liczba");
+            gravitation=jArray.getJSONObject(0).getInt("number");
             //name=jArray.getJSONObject(1).getString("name2");
 
         } catch (JSONException e) {
-         num=0;
+            gravitation=0;
         }
-        load(num);
+        load(gravitation);
     }
     /**
      * A native method that is implemented by the 'native-lib' native library,

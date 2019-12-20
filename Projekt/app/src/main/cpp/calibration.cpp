@@ -58,15 +58,9 @@ void Reading::cal(int a){
             rv[i] = magneticGet();
     }
     for (int i = 0; i < num_samples; i++) {
-        // sr=operator+(rv[i]);
-
-        sr.x += rv[i].x;
-        sr.y += rv[i].y;
-        sr.z += rv[i].z;
+         sr = sr + rv[i];
     }
-    sr.x = sr.x / num_samples;
-    sr.y = sr.y / num_samples;
-    sr.z = sr.z / num_samples;
+    sr= sr/num_samples;
     //odchylenie standardowe
     Vector4 odchylenie= Vector4(0,0,0);
     Vector4 zmienna= Vector4(0,0,0);
@@ -75,9 +69,9 @@ void Reading::cal(int a){
         zmienna.y += pow(rv[i].y - sr.y, 2);
         zmienna.z += pow(rv[i].z - sr.z, 2);
     }
-    odchylenie.x = -sqrtf(zmienna.x / num_samples)- sr.x;
-    odchylenie.y = -sqrtf(zmienna.y / num_samples)- sr.y;
-    odchylenie.z = -sqrtf(zmienna.z / num_samples)- sr.z;/////- sr.z
+    odchylenie.x = -sqrt(zmienna.x / num_samples)- sr.x;
+    odchylenie.y = -sqrt(zmienna.y / num_samples)- sr.y;
+    odchylenie.z = -sqrt(zmienna.z / num_samples)- sr.z;/////- sr.z
     setOffset(odchylenie);
 }
 

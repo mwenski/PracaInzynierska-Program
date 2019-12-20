@@ -12,6 +12,15 @@ Vector4 Vector4::operator+(Vector4 &a)
     temp.w = 1;
     return temp;
 }
+Vector4 Vector4::operator/(int &a)
+{
+    Vector4 temp;
+    temp.x = this->x / a;
+    temp.x = this->y / a;
+    temp.x = this->z / a;
+    temp.w = 1;
+    return temp;
+}
 Vector4& Vector4::operator=(const Vector4 &other)
 {
     if (this != &other)

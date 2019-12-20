@@ -10,6 +10,7 @@
 #include "glm/gtx/rotate_vector.hpp"
 #include "glm/gtx/closest_point.hpp"
 #include "glm/vec3.hpp"
+
 std::string getSensorList();
 void initialization_manager();
 void initialization_acceleration(char flags);

@@ -15,8 +15,8 @@
 #include "glm/gtx/closest_point.hpp"
 #include "glm/vec3.hpp"
 #include"config.h"
-#include"sensor.h"
 #include"calibration.h"
+#include"sensor.h"
 #include"trajectory.h"
 #include "control.h"
 #include <pthread.h>
@@ -112,7 +112,6 @@ Java_com_example_projekt_MainActivity_Update(
             return env->NewStringUTF(helper.c_str());
         }
         case 2:{
-            //odczyt();
             gyro.val=gyroGet();
             (button) ? (rv = gyro.getWithOffset()) : (rv = gyro.val);
             std::string helper = "Hi your gyroscope reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
@@ -120,8 +119,6 @@ Java_com_example_projekt_MainActivity_Update(
             return env->NewStringUTF(helper.c_str());
         }
         case 3:{
-            // read();
-
             rotation.val=rotationGet();
             (button) ? (rv = rotation.getWithOffset()) : (rv = rotation.val);
             std::string helper = "Hi your rotation vector reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
@@ -132,7 +129,7 @@ Java_com_example_projekt_MainActivity_Update(
             magnetic.val=magneticGet();
             (button) ? (rv = magnetic.getWithOffset()) : (rv = magnetic.val);
             std::string helper = "Hi your magnetic field reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
-                                 + std::to_string(rv.y) + " Z: " + std::to_string(odczytana);
+                                 + std::to_string(rv.y) + " Z: " + std::to_string(gravitation);
             return env->NewStringUTF(helper.c_str());
         }
         default:{
@@ -160,7 +157,7 @@ Java_com_example_projekt_MainActivity_load(
         JNIEnv *env,
         jobject /* this */,
         jint a){
- odczytana=a;
+ gravitation=a;
 }
 
 
