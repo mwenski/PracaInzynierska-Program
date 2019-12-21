@@ -99,9 +99,6 @@ Java_com_example_projekt_MainActivity_Update(
         jint i
 )
 {
-
-    switch(i){
-
     Vector4 rv;
     switch(i){
         case 1:{
@@ -139,10 +136,8 @@ Java_com_example_projekt_MainActivity_Update(
             return env->NewStringUTF(helper.c_str());
         }
     }
-    std::string helper = "switch wyszedł poza zakres";
-            return env->NewStringUTF(helper.c_str());
 }
-}
+
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Calibration(
         JNIEnv *env,
