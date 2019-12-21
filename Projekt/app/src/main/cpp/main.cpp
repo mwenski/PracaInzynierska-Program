@@ -43,11 +43,11 @@ void *perform_work(void *arguments) {
     while (1) {
         while (now_ms() - tim < 100);
         tim = now_ms();
-        u = first.run(1 - my.xyz[0].x);
         auto b = accelGet();
         br.set(b.x, b.y,b.z);
         my.xyz[0].x += br.val.x * (0.1);
         out = my.xyz[0].x;
+        u = first.run(1 - out);
         __android_log_print(ANDROID_LOG_INFO, "MainActivity", "OUTPUT IS %f U IS %f", out,
                             u);
 
@@ -78,8 +78,6 @@ initialization_gyroscope(0x01);
 initialization_rotation(0x01);
 initialization_magnetic(0x01);
 
-    pthread_t thread;
-    pthread_create(&thread, NULL, perform_work, nullptr);
 }
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Trajectory(
@@ -94,6 +92,13 @@ temp += "/trajectory.txt";
 setAttributes(x,0,0,0,1,1);
 env->ReleaseStringUTFChars(fp, SDpath);
 }
+
+extern struct Reading accel;
+extern struct Reading gyro;
+extern struct Reading rotation;
+extern struct Reading magnetic;
+extern struct Six_state dane;
+
 JNIEXPORT jstring JNICALL
 Java_com_example_projekt_MainActivity_Update(
         JNIEnv *env,
@@ -101,27 +106,37 @@ Java_com_example_projekt_MainActivity_Update(
         jint i
 )
 {
-    /*switch(i){
+
+    switch(i){
+
+    Vector4 rv;
+    switch(i){
         case 1:{
-        glm::vec3 rv = accelGet();
-        std::string helper = "Hi your accelerometer reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
-                             + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
+            accel.val=accelGet();
+            (button) ? (rv = accel.getWithOffset()) : (rv = accel.val);
+            std::string helper = "Hi your accelerometer reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
+                                 + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
         }
         case 2:{
-            glm::vec3 rv = gyroGet();
+            //odczyt();
+            gyro.val=gyroGet();
+            (button) ? (rv = gyro.getWithOffset()) : (rv = gyro.val);
             std::string helper = "Hi your gyroscope reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
         }
         case 3:{
-            glm::vec3 rv = rotationGet();
+
+            rotation.val=rotationGet();
+            (button) ? (rv = rotation.getWithOffset()) : (rv = rotation.val);
             std::string helper = "Hi your rotation vector reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
         }
         case 4:{
-            glm::vec3 rv = magneticGet();
+            magnetic.val=magneticGet();
+            (button) ? (rv = magnetic.getWithOffset()) : (rv = magnetic.val);
             std::string helper = "Hi your magnetic field reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
@@ -130,11 +145,19 @@ Java_com_example_projekt_MainActivity_Update(
             std::string helper = "switch wyszedł poza zakres";
             return env->NewStringUTF(helper.c_str());
         }
-
-    }*/
+    }
     std::string helper = "switch wyszedł poza zakres";
             return env->NewStringUTF(helper.c_str());
 }
-
-
+}
+JNIEXPORT void JNICALL
+Java_com_example_projekt_MainActivity_Calibration(
+        JNIEnv *env,
+        jobject /* this */){
+    button=1;
+    gyro.cal(1);
+    accel.cal(2);
+    rotation.cal(3);
+    magnetic.cal(4);
+}
 }

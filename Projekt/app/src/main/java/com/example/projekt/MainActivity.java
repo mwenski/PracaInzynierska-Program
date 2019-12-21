@@ -3,6 +3,7 @@ package com.example.projekt;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
 import android.widget.TextView;
 import android.os.Handler;
 import android.os.Message;
@@ -35,8 +36,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //Trajectory(Environment.getExternalStorageDirectory().getPath());
         Ini();
-        //mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
+
+        mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
     }
+    public void Click(View view) {
+        switch(view.getId()){
+            case R.id.button: {
+                Calibration();
+                break;
+            }
+        }
+
+    }
+
+
+
+
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -45,9 +60,13 @@ public class MainActivity extends AppCompatActivity {
     public native String Update(int i);
     public native void Trajectory(String fp);
     public native void Ini();
+    public native void Calibration();
+
 
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("our-lib");
     }
+
+
 }

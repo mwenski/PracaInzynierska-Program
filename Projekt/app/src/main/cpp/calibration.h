@@ -22,6 +22,7 @@ struct Reading{
     void setOffsetAsCurrent(); //wstawiamy wartosc -val jako offset zeby ustawic dany odczyt jako stan 0
     void setOffset(Vector4 a); //ustawiamy dany offset
     Vector4 getWithOffset();
+    void cal(int a);
 
 };
 #endif //PROJEKT_CALIBRATION_H

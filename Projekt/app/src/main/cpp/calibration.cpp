@@ -3,7 +3,8 @@
 //
 #include"sensor.h"
 #include"calibration.h"
-
+#include <unistd.h>
+#include "config.h"
 Six_state::Six_state() {
 zero();
 }
@@ -39,3 +40,54 @@ void Reading::zero()
     val = Vector4(0,0,0);
     offset = Vector4(0,0,0);
 }
+
+Reading rotation;
+Reading accel;
+Reading gyro;
+Reading magnetic;
+Six_state dane;
+void Reading::cal(int a){
+
+    int num_samples = 5;
+    Vector4 rv[num_samples];
+    Vector4 sr(0,0,0);
+
+    //srednia
+    for (int i = 0; i < num_samples; i++) {
+
+        //__android_log_print(ANDROID_LOG_INFO, "MainActivity", "Czytamy");
+        usleep(2.05*sampling_rate);
+        if(a==1)
+            rv[i] = accelGet();
+        if(a==2)
+            rv[i] = gyroGet();
+        if(a==3)
+            rv[i] = rotationGet();
+        if(a==4)
+            rv[i] = magneticGet();
+    }
+    for (int i = 0; i < num_samples; i++) {
+
+
+        sr.x += rv[i].x;
+        sr.y += rv[i].y;
+        sr.z += rv[i].z;
+    }
+    sr.x = sr.x / num_samples;
+    sr.y = sr.y / num_samples;
+    sr.z = sr.z / num_samples;
+    //odchylenie standardowe
+    Vector4 odchylenie= Vector4(0,0,0);
+    Vector4 zmienna= Vector4(0,0,0);
+    for (int i = 0; i < num_samples; i++) {
+        zmienna.x += pow(rv[i].x - sr.x, 2);
+        zmienna.y += pow(rv[i].y - sr.y, 2);
+        zmienna.z += pow(rv[i].z - sr.z, 2);
+    }
+    odchylenie.x = -sqrtf(zmienna.x / num_samples)- sr.x;
+    odchylenie.y = -sqrtf(zmienna.y / num_samples)- sr.y;
+    odchylenie.z = -sqrtf(zmienna.z / num_samples)- sr.z;/////- sr.z
+    setOffset(odchylenie);
+}
+
+

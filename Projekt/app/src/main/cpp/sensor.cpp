@@ -6,13 +6,6 @@
 #include <unistd.h>
 #include<vector>
 #include<fstream>
-#include <GLES2/gl2.h>
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/rotate_vector.hpp"
-#include "glm/gtx/closest_point.hpp"
-#include "glm/vec3.hpp"
 #include <camera/NdkCameraCaptureSession.h>
 #include <camera/NdkCameraDevice.h>
 #include <camera/NdkCameraError.h>
@@ -130,15 +123,15 @@ void initialization_magnetic(char flags)
     initFlags = initFlags | magneticFlag;
 }
 
-//========================================================================================
 
-glm::vec3 accelGet()//accelerator
+
+
+Vector4 accelGet()//accelerator
 {
     if(!(accelFlag & initFlags) || ASensorEventQueue_hasEvents(eventQ[0]) < 1)
-        return glm::vec3(0,0,0);
+        return Vector4(0,0,0);
     ASensorEvent event;
-
-    glm::vec3 rv;
+    Vector4 rv;
     //odczytuje wszystkie zebrane eventy i bierze najnowszego na wyjscie (ostatnieg)
     ASensorEvent eventTMP;
     while (ASensorEventQueue_getEvents(eventQ[0], &eventTMP, 1) > 0){
@@ -154,19 +147,21 @@ glm::vec3 accelGet()//accelerator
     return rv;
 }
 
-glm::vec3 gyroGet()//gyroscope
+
+Vector4 gyroGet()//gyroscope
 {
     if(!(gyroFlag & initFlags))
-        return glm::vec3(0,0,0);
+        return Vector4(0,0,0);
     ASensorEvent event;
-    glm::vec3 rv;
+    Vector4 rv;
     ASensorEvent eventTMP;
     while (ASensorEventQueue_getEvents(eventQ[1], &eventTMP, 1) > 0){
         event = eventTMP;
     }
-        __android_log_print(ANDROID_LOG_INFO, "MainActivity", "gyroscope: x=%f y=%f z=%f",
-                            event.vector.x, event.vector.y,
-                            event.vector.z);
+
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "gyroscope: x=%f y=%f z=%f",
+                        event.vector.x, event.vector.y,
+                        event.vector.z);
 
         rv.x = event.vector.x*180/M_PI;
         rv.y = event.vector.y*180/M_PI;
@@ -175,19 +170,22 @@ glm::vec3 gyroGet()//gyroscope
     return rv;
 }
 
-glm::vec3 rotationGet()//rotation
+
+Vector4 rotationGet()//rotation
 {
-    if(!(rotationFlag & initFlags))
-        return glm::vec3(0,0,0);
+    if (!(rotationFlag & initFlags)) {
+        Vector4 rv=Vector4(0, 0, 0);
+        return rv;
+    }
     ASensorEvent event;
-    glm::vec3 rv;
+    Vector4 rv;
     ASensorEvent eventTMP;
     while (ASensorEventQueue_getEvents(eventQ[2], &eventTMP, 1) > 0){
         event = eventTMP;
     }
-        __android_log_print(ANDROID_LOG_INFO, "MainActivity", "rotation: x=%f y=%f z=%f",
-                            event.vector.x, event.vector.y,
-                            event.vector.z);
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "rotation: x=%f y=%f z=%f",
+                        event.vector.x, event.vector.y,
+                        event.vector.z);
 
         rv.x = asin(event.vector.x)*2*180/M_PI;
         rv.y = asin(event.vector.y)*2*180/M_PI;
@@ -196,20 +194,20 @@ glm::vec3 rotationGet()//rotation
     return rv;
 }
 
-glm::vec3 magneticGet()//magnetic
+Vector4 magneticGet()//magnetic
 {
     if(!(magneticFlag & initFlags))
-        return glm::vec3(0,0,0);
+        return Vector4(0,0,0);
     ASensorEvent event;
-    glm::vec3 rv;
+    Vector4 rv;
     ASensorEvent eventTMP;
     while (ASensorEventQueue_getEvents(eventQ[3], &eventTMP, 1) > 0){
         event = eventTMP;
     }
-        __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
-                            event.magnetic.x, event.magnetic.y,
-                           event.magnetic.z);
-
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
+                        event.magnetic.x, event.magnetic.y,
+                        event.magnetic.z);
+						
         rv.x = event.magnetic.x;
         rv.y = event.magnetic.y;
         rv.z = event.magnetic.z;
@@ -217,7 +215,6 @@ glm::vec3 magneticGet()//magnetic
     return rv;
 }
 
-//=========================================================================================
 
 void onDisconnected(void* context, ACameraDevice* device)
 {

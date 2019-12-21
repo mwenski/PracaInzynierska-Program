@@ -6,4 +6,5 @@
 #define PROJEKT_CONFIG_H
 extern int config_variable_a;
 extern int sampling_rate;
+extern bool button;
 #endif //PROJEKT_CONFIG_H
