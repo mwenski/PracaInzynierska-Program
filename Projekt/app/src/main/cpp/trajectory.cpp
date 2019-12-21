@@ -5,13 +5,6 @@
 #include "trajectory.h"
 #include <unistd.h>
 #include<fstream>
-#include <GLES2/gl2.h>
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/rotate_vector.hpp"
-#include "glm/gtx/closest_point.hpp"
-#include "glm/vec3.hpp"
 float attributes[3][5] ={0}; //atrybuty dla wielomianu
 void setAttributes(AtrHelper xyz, float x4,float x3,float x2,float x1,float x0)//x=0,y=1,z=2
 {

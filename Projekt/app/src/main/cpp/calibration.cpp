@@ -5,6 +5,7 @@
 #include"calibration.h"
 #include <unistd.h>
 #include "config.h"
+#include<math.h>
 Six_state::Six_state() {
 zero();
 }

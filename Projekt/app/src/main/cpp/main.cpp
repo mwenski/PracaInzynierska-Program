@@ -7,13 +7,6 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <GLES2/gl2.h>
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/rotate_vector.hpp"
-#include "glm/gtx/closest_point.hpp"
-#include "glm/vec3.hpp"
 #include"config.h"
 #include"sensor.h"
 #include"calibration.h"
