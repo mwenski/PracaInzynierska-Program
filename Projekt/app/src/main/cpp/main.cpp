@@ -36,12 +36,18 @@ void *perform_work(void *arguments) {
 
     PID first = PID(1, 1, 1, 100);
     float out = 0;
+    Six_state my;
+    Reading br;
+    my.zero();
     float u = 0;
     while (1) {
         while (now_ms() - tim < 100);
         tim = now_ms();
-        u = first.run(1 - out);
-        out = accelGet().x;
+        u = first.run(1 - my.xyz[0].x);
+        auto b = accelGet();
+        br.set(b.x, b.y,b.z);
+        my.xyz[0].x += br.val.x * (0.1);
+        out = my.xyz[0].x;
         __android_log_print(ANDROID_LOG_INFO, "MainActivity", "OUTPUT IS %f U IS %f", out,
                             u);
 

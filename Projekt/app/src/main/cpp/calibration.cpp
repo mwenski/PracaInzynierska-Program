@@ -26,8 +26,16 @@ Reading::Reading()
 {
     zero();
 }
+void Reading::set(float a, float b, float c)
+{
+    val = Vector4(a,b,c);
+}
+void Reading::set(Vector4 a)
+{
+    val = a;
+}
 void Reading::zero()
 {
     val = Vector4(0,0,0);
-    val = Vector4(0,0,0);
+    offset = Vector4(0,0,0);
 }

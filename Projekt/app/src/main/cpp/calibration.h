@@ -17,6 +17,8 @@ struct Reading{
     Vector4 offset; // tutaj trzymamy nasza translacje, czyli jak czytam ze telefon jest obrocony o 1/2 pi a chcemy zeby to byl punkt zero to tutaj wrzucamy -1/2 pi
     Reading();
     void zero(); //zerujemy obie wartosci
+    void set(float a, float b, float c);
+    void set(Vector4 a);
     void setOffsetAsCurrent(); //wstawiamy wartosc -val jako offset zeby ustawic dany odczyt jako stan 0
     void setOffset(Vector4 a); //ustawiamy dany offset
     Vector4 getWithOffset();
