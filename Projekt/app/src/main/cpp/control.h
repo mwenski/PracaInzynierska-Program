@@ -34,6 +34,7 @@ class LObserver{ //obserwator Luenberga 1 wymiarowy
 public:
     void predict(arma::fvec::fixed<m> u,arma::fvec::fixed<o> y);
     LObserver(arma:: fmat::fixed<n,o> l, arma:: fmat::fixed<n,n> x, arma:: fmat::fixed<n,m> b, arma:: fmat::fixed<o,n> c, arma:: fmat::fixed<o,m> d, float t);
+    arma::fvec::fixed<n> getState();
 
 };
 #endif //PROJEKT_CONTROL_H

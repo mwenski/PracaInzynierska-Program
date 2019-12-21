@@ -49,3 +49,8 @@ void LObserver<n,m,o>::predict(arma::fvec::fixed<m> u,arma::fvec::fixed<o> y) //
     xhat += T*(X*xhat + B*u + L*(y-yhat));
 
 }
+template<int n, int m, int o>
+arma::fvec::fixed<n> LObserver<n,m,o>::getState()
+{
+    return xhat;
+}
