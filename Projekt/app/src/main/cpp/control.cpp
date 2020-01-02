@@ -54,3 +54,27 @@ arma::fvec::fixed<n> LObserver<n,m,o>::getState()
 {
     return xhat;
 }
+template<int n, int m, int o>
+void Kalman<n,m,o>::predict(fvec::fixed<m> u) //provide inputs to get kalman prediction for the next timestep
+{
+ xhat = X*xhat + B*u;
+ P = X*P*X.t()  + Q; // X.t() is transpose of X
+}
+template<int n, int m, int o>
+void Kalman<n,m,o>::update(fvec::fixed<o> z) //provide a measurement z to update kalman filter
+{
+    yhat = zhat - H*xhat;
+    S = H*P*H.t() + R;
+    K = P*H*S.i(); //S.i() returns inverse of S
+    xhat = xhat + K*yhat;
+    P = (eye(n,n) - K*H)*P;
+    yhat = z - H*xhat;
+
+}
+template<int n, int m, int o>
+Kalman<n,m,o>::Kalman()
+{
+    xhat.fill(0.0);
+    yhat.fill(0.0);
+    zhat.fill(0.0);
+}

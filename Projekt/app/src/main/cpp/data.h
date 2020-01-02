@@ -2,9 +2,12 @@
 // Created by John on 19/11/16.
 //
 
-#ifndef PROJEKT_CALIBRATION_H
-#define PROJEKT_CALIBRATION_H
-
+#ifndef PROJEKT_DATA_H
+#define PROJEKT_DATA_H
+#include <android/sensor.h>
+#include <android/log.h>
+#include <android/looper.h>
+#include "config.h"
 #include "vectors.h"
 struct Six_state{ //tutaj trzymamy wspolrzedne robota obrotowe, liniowe, i ich pochodne zero je nam zeruje
     Vector4 xyz[3]; //3 zmienne liniowe i 2 pochodne
@@ -22,7 +25,7 @@ struct Reading{
     void setOffsetAsCurrent(); //wstawiamy wartosc -val jako offset zeby ustawic dany odczyt jako stan 0
     void setOffset(Vector4 a); //ustawiamy dany offset
     Vector4 getWithOffset();
-    void cal(int a);
+    void cal(int a,ASensorEventQueue* ev);
 
 };
-#endif //PROJEKT_CALIBRATION_H
+#endif //PROJEKT_DATA_H

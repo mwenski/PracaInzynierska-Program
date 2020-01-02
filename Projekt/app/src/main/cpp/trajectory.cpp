@@ -26,5 +26,11 @@ Point getCT(float t)
     a.x[0] = getPoly(attributes[0][0],attributes[0][1],attributes[0][2],attributes[0][3],attributes[0][4],t);
     a.y[0] = getPoly(attributes[1][0],attributes[1][1],attributes[1][2],attributes[1][3],attributes[1][4],t);
     a.z[0] = getPoly(attributes[2][0],attributes[2][1],attributes[2][2],attributes[2][3],attributes[2][4],t);
+    a.x[1] = getPoly(0,attributes[0][0]*4,attributes[0][1]*3,attributes[0][2]*2,attributes[0][3],t);
+    a.y[1] = getPoly(0,attributes[1][0]*4,attributes[1][1]*3,attributes[1][2]*2,attributes[1][3],t);
+    a.z[1] = getPoly(0,attributes[2][0]*4,attributes[2][1]*3,attributes[2][2]*2,attributes[2][3],t);
+    a.x[2] = getPoly(0,0,attributes[0][0]*4*3,attributes[0][1]*3*2,attributes[0][2]*2,t);
+    a.x[2] = getPoly(0,0,attributes[1][0]*4*3,attributes[1][1]*3*2,attributes[1][2]*2,t);
+    a.x[2] = getPoly(0,0,attributes[2][0]*4*3,attributes[2][1]*3*2,attributes[2][2]*2,t);
     return a;
 }
