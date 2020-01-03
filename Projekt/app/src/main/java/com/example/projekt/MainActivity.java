@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    public String readJSONFromAsset() {//parsuje
+    public String readJSON() {//parsuje
         String json = null;
         try {
             InputStream in = getAssets().open("plik.json");
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         int gravitation;
         //String name;
         try {
-            JSONArray jArray = new JSONArray(readJSONFromAsset());
+            JSONArray jArray = new JSONArray(readJSON());
             gravitation=jArray.getJSONObject(0).getInt("number");
             //name=jArray.getJSONObject(1).getString("name2");
 

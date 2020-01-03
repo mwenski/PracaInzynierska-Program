@@ -152,16 +152,6 @@ Java_com_example_projekt_MainActivity_Calibration(
     magnetic.cal(4);
 }
 
-JNIEXPORT void JNICALL
-Java_com_example_projekt_MainActivity_load(
-        JNIEnv *env,
-        jobject /* this */,
-        jint a){
- gravitation=a;
-}
-
-
-
-
 
 }
+
