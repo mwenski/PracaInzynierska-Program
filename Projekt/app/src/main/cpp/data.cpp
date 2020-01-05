@@ -2,7 +2,7 @@
 // Created by John on 19/11/16.
 //
 #include"sensor.h"
-#include"calibration.h"
+#include"data.h"
 #include <unistd.h>
 #include "config.h"
 #include<math.h>
@@ -148,7 +148,7 @@ Reading accel;
 Reading gyro;
 Reading magnetic;
 Six_state dane;
-void Reading::cal(int a){
+void Reading::cal(int a,ASensorEventQueue* ev){
 
     int num_samples = 5;
     Vector4 rv[num_samples];
@@ -160,13 +160,13 @@ void Reading::cal(int a){
         //__android_log_print(ANDROID_LOG_INFO, "MainActivity", "Czytamy");
         usleep(2.05*sampling_rate);
         if(a==1)
-            rv[i] = accelGet();
+            rv[i] = accelGet(ev);
         if(a==2)
-            rv[i] = gyroGet();
+            rv[i] = gyroGet(ev);
         if(a==3)
-            rv[i] = rotationGet();
+            rv[i] = rotationGet(ev);
         if(a==4)
-            rv[i] = magneticGet();
+            rv[i] = magneticGet(ev);
     }
     for (int i = 0; i < num_samples; i++) {
 

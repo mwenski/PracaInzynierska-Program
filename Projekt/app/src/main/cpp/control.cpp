@@ -53,8 +53,6 @@ template<int n, int m, int o>
 Matrix<float,n,1> LObserver<n,m,o>::getState()
 {
     return xhat;
-<<<<<<< Updated upstream
-=======
 }
 template<int n, int m, int o>
 void Kalman<n,m,o>::predict(Matrix<float,m,1> u) //provide inputs to get kalman prediction for the next timestep
@@ -81,5 +79,4 @@ Kalman<n,m,o>::Kalman()
     xhat = xhat.Zero();
     yhat = yhat.Zero();
     zhat = zhat.Zero();
->>>>>>> Stashed changes
 }

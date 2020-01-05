@@ -20,7 +20,7 @@ add_library( # Sets the name of the library.
         trajectory.cpp
         main.cpp
         config.cpp
-        calibration.cpp
+        data.cpp
         vectors.cpp
         control.cpp
         )

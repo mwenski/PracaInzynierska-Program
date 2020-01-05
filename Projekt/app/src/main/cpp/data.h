@@ -6,6 +6,9 @@
 #define PROJEKT_CALIBRATION_H
 
 #include "vectors.h"
+#include <android/sensor.h>
+#include <android/log.h>
+#include <android/looper.h>
 #include "Eigen/Eigen/Dense"
 using namespace Eigen;
 struct Six_state{ //tutaj trzymamy wspolrzedne robota obrotowe, liniowe, i ich pochodne zero je nam zeruje
@@ -25,13 +28,6 @@ struct Reading{
     void set(Matrix<float,4,1> a);
     void setOffsetAsCurrent(); //wstawiamy wartosc -val jako offset zeby ustawic dany odczyt jako stan 0
     void setOffset(Vector4 a); //ustawiamy dany offset
-<<<<<<< Updated upstream:Projekt/app/src/main/cpp/calibration.h
-    Vector4 getWithOffset();
-    void cal(int a);
-
-};
-#endif //PROJEKT_CALIBRATION_H
-=======
     void setOffset(Matrix<float,4,1> a);
     Matrix<float,4,1> getWithOffset();
     void cal(int a,ASensorEventQueue* ev);
@@ -45,4 +41,3 @@ Matrix<float,4,4> rotationZ(float a);
 Matrix<float,4,4> translation(float x, float y,float z);
 Matrix<float,4,4> translation(Matrix<float,3,1> a);
 #endif //PROJEKT_DATA_H
->>>>>>> Stashed changes:Projekt/app/src/main/cpp/data.h

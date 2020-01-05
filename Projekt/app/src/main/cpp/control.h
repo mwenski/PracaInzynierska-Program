@@ -6,15 +6,9 @@
 #define PROJEKT_CONTROL_H
 
 #include "vectors.h"
-<<<<<<< Updated upstream
-#include "calibration.h"
-#include "arma/include/armadillo"
-=======
 #include "data.h"
-//#include "arma/include/armadillo"
 #include "Eigen/Eigen/Dense"
 using namespace Eigen;
->>>>>>> Stashed changes
 class PID{ // Klasa regulatora PID o wzorze Kp * e(t) + Ki * (sum 0 -> t e(t)) + Kd * (e(t) - e(t-1))/T
     float Kp;
     float Ki;
@@ -44,8 +38,7 @@ public:
     Matrix<float,n,1> getState();
 
 };
-<<<<<<< Updated upstream
-=======
+
 template <int n, int m, int o> //x size, u size, y/z size
 struct Kalman{
     Matrix<float,n,1> xhat;
@@ -64,5 +57,4 @@ struct Kalman{
     void update(Matrix<float,o,1> z);
     Kalman();
 };
->>>>>>> Stashed changes
 #endif //PROJEKT_CONTROL_H
