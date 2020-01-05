@@ -31,7 +31,7 @@ float PID::run(float in){
     return ret;
 }
 template<int n, int m, int o>
-LObserver<n,m,o>::LObserver(arma:: fmat::fixed<n,o> l, arma:: fmat::fixed<n,n> x, arma:: fmat::fixed<n,m> b, arma:: fmat::fixed<o,n> c, arma:: fmat::fixed<o,m> d, float t)
+LObserver<n,m,o>::LObserver(Matrix<float,n,o> l, Matrix<float,n,n> x, Matrix<float,n,m> b, Matrix<float,o,n> c, Matrix<float,o,m> d, float t)
 {
     L=l;
     X=x;
@@ -39,18 +39,47 @@ LObserver<n,m,o>::LObserver(arma:: fmat::fixed<n,o> l, arma:: fmat::fixed<n,n> x
     C=c;
     D=d;
     T=t;
-    xhat.fill(0);
-    yhat.fill(0);
+    xhat = xhat.Zero() ;
+    yhat = yhat.Zero();
 }
 template<int n, int m, int o>
-void LObserver<n,m,o>::predict(arma::fvec::fixed<m> u,arma::fvec::fixed<o> y) //funkcja obserwatora Luenberga która oblicza następny krok metoda eulera w wstecz
+void LObserver<n,m,o>::predict(Matrix<float,m,1> u,Matrix<float,o,1> y) //funkcja obserwatora Luenberga która oblicza następny krok metoda eulera w wstecz
 {
     yhat = C*xhat + D*u;
-    xhat += T*(X*xhat + B*u + L*(y-yhat));
+    xhat += T*(X*xhat + B*u + L*(y - yhat));
 
 }
 template<int n, int m, int o>
-arma::fvec::fixed<n> LObserver<n,m,o>::getState()
+Matrix<float,n,1> LObserver<n,m,o>::getState()
 {
     return xhat;
+<<<<<<< Updated upstream
+=======
+}
+template<int n, int m, int o>
+void Kalman<n,m,o>::predict(Matrix<float,m,1> u) //provide inputs to get kalman prediction for the next timestep
+{
+ xhat = X*xhat + B*u;
+ P = X*P*X.transpose()  + Q; // X.t() is transpose of X
+}
+template<int n, int m, int o>
+void Kalman<n,m,o>::update(Matrix<float,o,1> z) //provide a measurement z to update kalman filter
+{   Matrix<float, n,n> helper;
+helper = helper.setIdentity();
+    MatrixXf helper2 = S.inverse();
+    yhat = zhat - H*xhat;
+    S = H*P*H.transpose() + R;
+    K = P*H*helper2; //S.i() returns inverse of S
+    xhat = xhat + K*yhat;
+    P = (helper - K*H)*P;
+    yhat = z - H*xhat;
+
+}
+template<int n, int m, int o>
+Kalman<n,m,o>::Kalman()
+{
+    xhat = xhat.Zero();
+    yhat = yhat.Zero();
+    zhat = zhat.Zero();
+>>>>>>> Stashed changes
 }

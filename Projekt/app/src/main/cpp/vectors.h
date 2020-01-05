@@ -4,6 +4,8 @@
 
 #ifndef PROJEKT_VECTORS_H
 #define PROJEKT_VECTORS_H
+#include "Eigen/Eigen/Dense"
+using namespace Eigen;
 struct Vector4{
     float val[4];
     float& x = val[0];
@@ -12,6 +14,7 @@ struct Vector4{
     float& w = val[3];
     Vector4 operator+(Vector4 &a);
     Vector4& operator=(const Vector4 &other);
+    Vector4& operator=(const Matrix<float,4,1> &other);
     Vector4(float x,float y,float z);
     Vector4();
 
