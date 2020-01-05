@@ -19,10 +19,11 @@ void Six_state::transformFrame(Matrix<float,4,4> A) //transformuj wspolrzedne do
 {
 
         xyz[0] = A*xyz[0];
-        xyz[1] = A*xyz[1];
-        xyz[2] = A*xyz[2];
         xyz[1](3) = 0;
         xyz[2](3) = 0;
+        xyz[1] = A*xyz[1];
+        xyz[2] = A*xyz[2];
+
 
 };
 
@@ -125,6 +126,9 @@ Matrix<float,4,4> translation(float x, float y,float z)
 {
     Matrix<float,4,4> rv;
     rv = rv.Zero();
+    rv(0,0) = 1;
+    rv(1,1) = 1;
+    rv(2,2) = 1;
     rv(0,3) = x;
     rv(1,3) = y;
     rv(2,3) = z;
@@ -136,6 +140,9 @@ Matrix<float,4,4> translation(Matrix<float,3,1> a)
 {
     Matrix<float,4,4> rv;
     rv = rv.Zero();
+    rv(0,0) = 1;
+    rv(1,1) = 1;
+    rv(2,2) = 1;
     if(a.size()<3) return rv;
     rv(0,3) = a(0);
     rv(1,3) = a(1);
