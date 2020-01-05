@@ -38,8 +38,8 @@ void *perform_work(void *arguments) {
         tim = now_ms();
         auto b = accelGet();
         br.set(b.x, b.y,b.z);
-        my.xyz[0](0) += br.val(0) * (0.1);
-        out = my.xyz[0](0);
+        my.xyz[0].x += br.val.x * (0.1);
+        out = my.xyz[0].x;
         u = first.run(1 - out);
         __android_log_print(ANDROID_LOG_INFO, "MainActivity", "OUTPUT IS %f U IS %f", out,
                             u);
@@ -55,17 +55,14 @@ jobject /* this */) {
     initialization_manager(); //zawsze na początku
    const char *b = getSensorList().c_str();
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);
-    Matrix<float,4,4> al;
-    al = al.Zero();
-    al(0,0)= 1;
-    al(1,1) = 1;
-    al(2,2) = 1;
-    al(3,3) = 1;
-    Matrix<float,4,1> der;
-    der << 2,3,4,0;
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der(0),der(1),der(2));
+    Matrice4 al;
+    al.cell[0][0] = 1;
+    al.cell[1][1] = 1;
+    al.cell[2][2] = 1;
+    al.cell[3][3] = 1;
+    Vector4 der(2,3,4);
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der.x,der.y,der.z);
     der = al*der;
-<<<<<<< Updated upstream
     Vector4 das = der;
     der.x = das.y;//3
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der.x,der.y,der.z);
@@ -73,22 +70,6 @@ initialization_acceleration(0x01);
 initialization_gyroscope(0x01);
 initialization_rotation(0x01);
 initialization_magnetic(0x01);
-=======
-    Matrix<float,2,2> alr;
-    alr = alr.Zero();
-    alr(0,0) = 1;
-    alr(1,1) = 2;
-    MatrixXf ab = alr.inverse();
-    Matrix<float,4,1> das = der;
-    der(0) = das(2);//3
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der(0),der(1),der(2));
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "MATRIX IS %f %f /n %f %f", ab(0,0),ab(0,1),ab(1,0), ab(1,1));
-
-    eventQ[0] = initialization_acceleration(0x01);
-eventQ[1] = initialization_gyroscope(0x01);
-eventQ[2] = initialization_rotation(0x01);
-eventQ[3] = initialization_magnetic(0x01);
->>>>>>> Stashed changes
 
 }
 JNIEXPORT void JNICALL
@@ -121,11 +102,7 @@ Java_com_example_projekt_MainActivity_Update(
     Vector4 rv;
     switch(i){
         case 1:{
-<<<<<<< Updated upstream
             accel.val=accelGet();
-=======
-            accel.set(accelGet(eventQ[0]));
->>>>>>> Stashed changes
             (button) ? (rv = accel.getWithOffset()) : (rv = accel.val);
             std::string helper = "Hi your accelerometer reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
@@ -133,11 +110,7 @@ Java_com_example_projekt_MainActivity_Update(
         }
         case 2:{
             //odczyt();
-<<<<<<< Updated upstream
             gyro.val=gyroGet();
-=======
-            gyro.set(gyroGet(eventQ[1]));
->>>>>>> Stashed changes
             (button) ? (rv = gyro.getWithOffset()) : (rv = gyro.val);
             std::string helper = "Hi your gyroscope reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
@@ -145,22 +118,14 @@ Java_com_example_projekt_MainActivity_Update(
         }
         case 3:{
 
-<<<<<<< Updated upstream
             rotation.val=rotationGet();
-=======
-            rotation.set(rotationGet(eventQ[2]));
->>>>>>> Stashed changes
             (button) ? (rv = rotation.getWithOffset()) : (rv = rotation.val);
             std::string helper = "Hi your rotation vector reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
             return env->NewStringUTF(helper.c_str());
         }
         case 4:{
-<<<<<<< Updated upstream
             magnetic.val=magneticGet();
-=======
-            magnetic.set(magneticGet(eventQ[3]));
->>>>>>> Stashed changes
             (button) ? (rv = magnetic.getWithOffset()) : (rv = magnetic.val);
             std::string helper = "Hi your magnetic field reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
                                  + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
