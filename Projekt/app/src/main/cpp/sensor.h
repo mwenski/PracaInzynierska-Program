@@ -4,23 +4,30 @@
 
 //#include <GLES2/gl2.h>
 #include "vectors.h"
-#include<string>
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/rotate_vector.hpp"
-#include "glm/gtx/closest_point.hpp"
-#include "glm/vec3.hpp"
-
+#include <android/sensor.h>
+#include <android/log.h>
+#include <android/looper.h>
+#include <camera/NdkCameraCaptureSession.h>
+#include <camera/NdkCameraDevice.h>
+#include <camera/NdkCameraError.h>
+#include <camera/NdkCameraMetadata.h>
+#include <camera/NdkCameraMetadataTags.h>
+#include <camera/NdkCameraWindowType.h>
+#include <camera/NdkCaptureRequest.h>
+#include <camera/NdkCameraManager.h>
+#include <string>
+#include <unistd.h>
+#include<vector>
+#include<fstream>
 
 std::string getSensorList();
 void initialization_manager();
-void initialization_acceleration(char flags);
-void initialization_gyroscope(char flags);
-void initialization_rotation(char flags);
-void initialization_magnetic(char flags);
-Vector4 accelGet();
-Vector4 gyroGet();
-Vector4 rotationGet();
-Vector4 magneticGet();
+ASensorEventQueue* initialization_acceleration(char flags);
+ASensorEventQueue* initialization_gyroscope(char flags);
+ASensorEventQueue* initialization_rotation(char flags);
+ASensorEventQueue* initialization_magnetic(char flags);
+Vector4 accelGet(ASensorEventQueue* ev);
+Vector4 gyroGet(ASensorEventQueue* ev);
+Vector4 rotationGet(ASensorEventQueue* ev);
+Vector4 magneticGet(ASensorEventQueue* ev);
 #endif //PROJEKT_SENSOR_H

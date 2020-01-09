@@ -9,7 +9,8 @@ cmake_minimum_required(VERSION 3.4.1)
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
-add_subdirectory(arma)
+
+include_directories(src/main/cpp/eigen)
 add_library( # Sets the name of the library.
              our-lib
              # Sets the library as a shared library.
@@ -19,7 +20,7 @@ add_library( # Sets the name of the library.
         trajectory.cpp
         main.cpp
         config.cpp
-        calibration.cpp
+        data.cpp
         vectors.cpp
         control.cpp
         )
