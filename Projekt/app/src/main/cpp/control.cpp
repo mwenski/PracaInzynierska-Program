@@ -30,17 +30,27 @@ float PID::run(float in){
     memd = in;
     return ret;
 }
-
-LObserver::LObserver(float l, float x, float b, float c, float d)
+template<int n, int m, int o>
+LObserver<n,m,o>::LObserver(arma:: fmat::fixed<n,o> l, arma:: fmat::fixed<n,n> x, arma:: fmat::fixed<n,m> b, arma:: fmat::fixed<o,n> c, arma:: fmat::fixed<o,m> d, float t)
 {
     L=l;
     X=x;
     B=b;
     C=c;
     D=d;
+    T=t;
+    xhat.fill(0);
+    yhat.fill(0);
 }
-void LObserver::predict(float u, float y)
+template<int n, int m, int o>
+void LObserver<n,m,o>::predict(arma::fvec::fixed<m> u,arma::fvec::fixed<o> y) //funkcja obserwatora Luenberga która oblicza następny krok metoda eulera w wstecz
 {
-    xhat = X*xhat + B*u + L*(y-yhat);
     yhat = C*xhat + D*u;
+    xhat += T*(X*xhat + B*u + L*(y-yhat));
+
+}
+template<int n, int m, int o>
+arma::fvec::fixed<n> LObserver<n,m,o>::getState()
+{
+    return xhat;
 }

@@ -14,3 +14,4 @@ jobject /* this */,
 jint a){
 gravitation=a;
 }
+

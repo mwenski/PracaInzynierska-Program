@@ -15,6 +15,4 @@ Java_com_example_projekt_MainActivity_load(
         jobject /* this */,
         jint a);
 
-
-
 #endif //PROJEKT_CONFIG_H

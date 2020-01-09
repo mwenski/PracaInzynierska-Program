@@ -5,13 +5,6 @@
 #include <unistd.h>
 #include<vector>
 #include<fstream>
-#include <GLES2/gl2.h>
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/rotate_vector.hpp"
-#include "glm/gtx/closest_point.hpp"
-#include "glm/vec3.hpp"
 #include <camera/NdkCameraCaptureSession.h>
 #include <camera/NdkCameraDevice.h>
 #include <camera/NdkCameraError.h>
@@ -144,14 +137,13 @@ void initialization_magnetic(char flags)
     initFlags = initFlags | magneticFlag;
 }
 
-//========================================================================================
+
 
 Vector4 accelGet()//accelerator
 {
     if(!(accelFlag & initFlags) || ASensorEventQueue_hasEvents(eventQ[0]) < 1)
         return Vector4(0,0,0);
     ASensorEvent event;
-
     Vector4 rv;
     //odczytuje wszystkie zebrane eventy i bierze najnowszego na wyjscie (ostatnieg)
     ASensorEvent eventTMP;
@@ -168,6 +160,7 @@ Vector4 accelGet()//accelerator
     return rv;
 }
 
+
 Vector4 gyroGet()//gyroscope
 {
     if(!(gyroFlag & initFlags))
@@ -178,6 +171,7 @@ Vector4 gyroGet()//gyroscope
     while (ASensorEventQueue_getEvents(eventQ[1], &eventTMP, 1) > 0){
         event = eventTMP;
     }
+
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "gyroscope: x=%f y=%f z=%f",
                         event.vector.x, event.vector.y,
                         event.vector.z);
@@ -188,6 +182,7 @@ Vector4 gyroGet()//gyroscope
 
     return rv;
 }
+
 
 Vector4 rotationGet()//rotation
 {
@@ -233,7 +228,6 @@ Vector4 magneticGet()//magnetic
     return rv;
 }
 
-//=========================================================================================
 
 void onDisconnected(void* context, ACameraDevice* device)
 {

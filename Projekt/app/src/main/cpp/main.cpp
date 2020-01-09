@@ -7,13 +7,6 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <GLES2/gl2.h>
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/rotate_vector.hpp"
-#include "glm/gtx/closest_point.hpp"
-#include "glm/vec3.hpp"
 #include"config.h"
 #include"calibration.h"
 #include"sensor.h"
@@ -36,12 +29,18 @@ void *perform_work(void *arguments) {
 
     PID first = PID(1, 1, 1, 100);
     float out = 0;
+    Six_state my;
+    Reading br;
+    my.zero();
     float u = 0;
     while (1) {
         while (now_ms() - tim < 100);
         tim = now_ms();
+        auto b = accelGet();
+        br.set(b.x, b.y,b.z);
+        my.xyz[0].x += br.val.x * (0.1);
+        out = my.xyz[0].x;
         u = first.run(1 - out);
-        out = accelGet().x;
         __android_log_print(ANDROID_LOG_INFO, "MainActivity", "OUTPUT IS %f U IS %f", out,
                             u);
 
@@ -72,8 +71,6 @@ initialization_gyroscope(0x01);
 initialization_rotation(0x01);
 initialization_magnetic(0x01);
 
-    pthread_t thread;
-    pthread_create(&thread, NULL, perform_work, nullptr);
 }
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Trajectory(
@@ -112,6 +109,7 @@ Java_com_example_projekt_MainActivity_Update(
             return env->NewStringUTF(helper.c_str());
         }
         case 2:{
+
             gyro.val=gyroGet();
             (button) ? (rv = gyro.getWithOffset()) : (rv = gyro.val);
             std::string helper = "Hi your gyroscope reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
@@ -119,6 +117,7 @@ Java_com_example_projekt_MainActivity_Update(
             return env->NewStringUTF(helper.c_str());
         }
         case 3:{
+
             rotation.val=rotationGet();
             (button) ? (rv = rotation.getWithOffset()) : (rv = rotation.val);
             std::string helper = "Hi your rotation vector reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
@@ -138,9 +137,8 @@ Java_com_example_projekt_MainActivity_Update(
         }
 
     }
-   // std::string helper = "switch wyszedł poza zakres";
-    //        return env->NewStringUTF(helper.c_str());
 }
+
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Calibration(
         JNIEnv *env,
@@ -151,7 +149,6 @@ Java_com_example_projekt_MainActivity_Calibration(
     rotation.cal(3);
     magnetic.cal(4);
 }
-
 
 }
 

@@ -5,6 +5,9 @@
 #include"calibration.h"
 #include <unistd.h>
 #include "config.h"
+
+#include<math.h>
+
 Six_state::Six_state() {
 zero();
 }
@@ -27,11 +30,21 @@ Reading::Reading()
 {
     zero();
 }
+void Reading::set(float a, float b, float c)
+{
+    val = Vector4(a,b,c);
+}
+void Reading::set(Vector4 a)
+{
+    val = a;
+}
 void Reading::zero()
 {
     val = Vector4(0,0,0);
-    val = Vector4(0,0,0);
+    offset = Vector4(0,0,0);
 }
+
+
 Reading rotation;
 Reading accel;
 Reading gyro;
@@ -61,6 +74,7 @@ void Reading::cal(int a){
          sr = sr + rv[i];
     }
     sr= sr/num_samples;
+
     //odchylenie standardowe
     Vector4 odchylenie= Vector4(0,0,0);
     Vector4 zmienna= Vector4(0,0,0);
@@ -69,27 +83,12 @@ void Reading::cal(int a){
         zmienna.y += pow(rv[i].y - sr.y, 2);
         zmienna.z += pow(rv[i].z - sr.z, 2);
     }
+
     odchylenie.x = -sqrt(zmienna.x / num_samples)- sr.x;
     odchylenie.y = -sqrt(zmienna.y / num_samples)- sr.y;
     odchylenie.z = -sqrt(zmienna.z / num_samples)- sr.z;/////- sr.z
     setOffset(odchylenie);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

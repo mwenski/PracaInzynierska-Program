@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         Ini();
         mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
     }
+  
     public void Click(View view) {
         switch(view.getId()){
             case R.id.button: {
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
+
 
     }
     public String readJSON() {//parsuje
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         }
         load(gravitation);
     }
+
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     public native void Ini();
     public native void Calibration();
     public native void load(int a);
+
 
     // Used to load the 'native-lib' library on application startup.
     static {
