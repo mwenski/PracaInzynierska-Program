@@ -24,5 +24,6 @@ struct Reading{
     Vector4 getWithOffset();
     void cal(int a);
 
+
 };
 #endif //PROJEKT_CALIBRATION_H

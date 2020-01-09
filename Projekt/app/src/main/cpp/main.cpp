@@ -8,8 +8,8 @@
 #include <fstream>
 #include <iostream>
 #include"config.h"
-#include"sensor.h"
 #include"calibration.h"
+#include"sensor.h"
 #include"trajectory.h"
 #include "control.h"
 #include <pthread.h>
@@ -109,7 +109,7 @@ Java_com_example_projekt_MainActivity_Update(
             return env->NewStringUTF(helper.c_str());
         }
         case 2:{
-            //odczyt();
+
             gyro.val=gyroGet();
             (button) ? (rv = gyro.getWithOffset()) : (rv = gyro.val);
             std::string helper = "Hi your gyroscope reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
@@ -128,13 +128,14 @@ Java_com_example_projekt_MainActivity_Update(
             magnetic.val=magneticGet();
             (button) ? (rv = magnetic.getWithOffset()) : (rv = magnetic.val);
             std::string helper = "Hi your magnetic field reads (x,y,z) X: " + std::to_string(rv.x) + " Y: "
-                                 + std::to_string(rv.y) + " Z: " + std::to_string(rv.z);
+                                 + std::to_string(rv.y) + " Z: " + std::to_string(gravitation);
             return env->NewStringUTF(helper.c_str());
         }
         default:{
             std::string helper = "switch wyszedł poza zakres";
             return env->NewStringUTF(helper.c_str());
         }
+
     }
 }
 
@@ -148,4 +149,6 @@ Java_com_example_projekt_MainActivity_Calibration(
     rotation.cal(3);
     magnetic.cal(4);
 }
+
 }
+

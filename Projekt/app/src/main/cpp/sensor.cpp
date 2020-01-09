@@ -1,4 +1,3 @@
-
 #include <string>
 #include <android/sensor.h>
 #include <android/log.h>
@@ -15,12 +14,17 @@
 #include <camera/NdkCaptureRequest.h>
 #include <camera/NdkCameraManager.h>
 #include "sensor.h"
-#include <cmath>
 #include"config.h"
+#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #define accelFlag 0x01
 #define gyroFlag 0x02
-#define magneticFlag 0x03
-#define rotationFlag 0x04
+#define magneticFlag 0x04
+#define rotationFlag 0x08
 //#include <experimental/filesystem>
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "MainActivity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "MainActivity", __VA_ARGS__))
@@ -48,23 +52,33 @@ void initialization_manager()
 {
     sensorManager = ASensorManager_getInstance();      // referencja do obiektu managera
 }
-void initialization_acceleration(char flags)
-{
-    ALooper *thr = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS); //zwraca referencje do loopera tego watku lub tworzy nowy gdy go brak
+void initialization_acceleration(char flags) {
+    ALooper *thr = ALooper_prepare(
+            ALOOPER_PREPARE_ALLOW_NON_CALLBACKS); //zwraca referencje do loopera tego watku lub tworzy nowy gdy go brak
     ALooper_acquire(thr); //zabrania usunieciu loopera, w tym przypadku wydaje sie by nie potrzebne
-    const ASensor *acc = ASensorManager_getDefaultSensor(
-            sensorManager,
-            ASENSOR_TYPE_LINEAR_ACCELERATION); //referencja do akcelerometru
-    eventQ[0] = ASensorManager_createEventQueue(
-            sensorManager,
-            thr, 3,
-            NULL, NULL);//tworzymy kolejke eventow dla naszego looper, 4 argument jest funkcja automatycznie wywolywana jesli looper zbierze event z sensora, tutaj brak jako ze robimy to recznie z javy
-    ASensorEventQueue_enableSensor(eventQ[0],
-                                   acc);
-    ASensorEventQueue_setEventRate(eventQ[0],
-                                   acc,
-                                   sampling_rate); //10hz, okres probkowania w mikrosekundach jako argument
-    initFlags = initFlags | accelFlag;
+    const ASensor *acc;
+    if (gravitation == 1) {
+        acc = ASensorManager_getDefaultSensor(
+                sensorManager,
+                ASENSOR_TYPE_ACCELEROMETER); //referencja do akcelerometru
+    }
+    else if (gravitation == 2){
+        acc = ASensorManager_getDefaultSensor(
+                sensorManager,
+                ASENSOR_TYPE_LINEAR_ACCELERATION);
+    }
+        eventQ[0] = ASensorManager_createEventQueue(
+                sensorManager,
+                thr, 3,
+                NULL,
+                NULL);//tworzymy kolejke eventow dla naszego looper, 4 argument jest funkcja automatycznie wywolywana jesli looper zbierze event z sensora, tutaj brak jako ze robimy to recznie z javy
+        ASensorEventQueue_enableSensor(eventQ[0],
+                                       acc);
+        ASensorEventQueue_setEventRate(eventQ[0],
+                                       acc,
+                                       sampling_rate); //10hz, okres probkowania w mikrosekundach jako argument
+        initFlags = initFlags | accelFlag;
+
 }
 
 void initialization_gyroscope(char flags)
@@ -125,7 +139,6 @@ void initialization_magnetic(char flags)
 
 
 
-
 Vector4 accelGet()//accelerator
 {
     if(!(accelFlag & initFlags) || ASensorEventQueue_hasEvents(eventQ[0]) < 1)
@@ -137,9 +150,9 @@ Vector4 accelGet()//accelerator
     while (ASensorEventQueue_getEvents(eventQ[0], &eventTMP, 1) > 0){
         event = eventTMP;
     }//odbieramy event
-        __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
-                            event.acceleration.x, event.acceleration.y,
-                            event.acceleration.z);
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
+                        event.acceleration.x, event.acceleration.y,
+                        event.acceleration.z);
         rv.x = event.acceleration.x;
         rv.y = event.acceleration.y;
         rv.z = event.acceleration.z;
@@ -207,7 +220,7 @@ Vector4 magneticGet()//magnetic
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
                         event.magnetic.x, event.magnetic.y,
                         event.magnetic.z);
-						
+
         rv.x = event.magnetic.x;
         rv.y = event.magnetic.y;
         rv.z = event.magnetic.z;
