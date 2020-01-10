@@ -1,30 +1,19 @@
 
-#include <string>
-#include <android/sensor.h>
-#include <android/log.h>
-#include <android/looper.h>
-#include <unistd.h>
-#include<vector>
-#include<fstream>
-#include <camera/NdkCameraCaptureSession.h>
-#include <camera/NdkCameraDevice.h>
-#include <camera/NdkCameraError.h>
-#include <camera/NdkCameraMetadata.h>
-#include <camera/NdkCameraMetadataTags.h>
-#include <camera/NdkCameraWindowType.h>
-#include <camera/NdkCaptureRequest.h>
-#include <camera/NdkCameraManager.h>
 #include "sensor.h"
-#include <cmath>
 #include"config.h"
+#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #define accelFlag 0x01
 #define gyroFlag 0x02
-#define magneticFlag 0x03
-#define rotationFlag 0x04
+#define magneticFlag 0x04
+#define rotationFlag 0x08
 //#include <experimental/filesystem>
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "MainActivity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "MainActivity", __VA_ARGS__))
-ASensorEventQueue *eventQ[4];
 char initFlags = 0x00;
 ASensorManager *sensorManager;
 std::string getSensorList()
@@ -48,98 +37,111 @@ void initialization_manager()
 {
     sensorManager = ASensorManager_getInstance();      // referencja do obiektu managera
 }
-void initialization_acceleration(char flags)
+
+ASensorEventQueue* initialization_acceleration(char flags)
 {
     ALooper *thr = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS); //zwraca referencje do loopera tego watku lub tworzy nowy gdy go brak
     ALooper_acquire(thr); //zabrania usunieciu loopera, w tym przypadku wydaje sie by nie potrzebne
-    const ASensor *acc = ASensorManager_getDefaultSensor(
-            sensorManager,
-            ASENSOR_TYPE_LINEAR_ACCELERATION); //referencja do akcelerometru
-    eventQ[0] = ASensorManager_createEventQueue(
+    const ASensor *acc;
+    if (gravitation == 1) {
+        acc = ASensorManager_getDefaultSensor(
+                sensorManager,
+                ASENSOR_TYPE_ACCELEROMETER); //referencja do akcelerometru
+    }
+    else if (gravitation == 2){
+        acc = ASensorManager_getDefaultSensor(
+                sensorManager,
+                ASENSOR_TYPE_LINEAR_ACCELERATION);
+    } //referencja do akcelerometru
+    ASensorEventQueue* ev = ASensorManager_createEventQueue(
             sensorManager,
             thr, 3,
             NULL, NULL);//tworzymy kolejke eventow dla naszego looper, 4 argument jest funkcja automatycznie wywolywana jesli looper zbierze event z sensora, tutaj brak jako ze robimy to recznie z javy
-    ASensorEventQueue_enableSensor(eventQ[0],
+    ASensorEventQueue_enableSensor(ev,
                                    acc);
-    ASensorEventQueue_setEventRate(eventQ[0],
+    ASensorEventQueue_setEventRate(ev,
                                    acc,
                                    sampling_rate); //10hz, okres probkowania w mikrosekundach jako argument
     initFlags = initFlags | accelFlag;
+    return ev;
 }
 
-void initialization_gyroscope(char flags)
+ASensorEventQueue* initialization_gyroscope(char flags)
 {
     ALooper *thr = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
     ALooper_acquire(thr);
     const ASensor *acc = ASensorManager_getDefaultSensor(
             sensorManager,
             ASENSOR_TYPE_GYROSCOPE);
-    eventQ[1] = ASensorManager_createEventQueue(
+    ASensorEventQueue* ev = ASensorManager_createEventQueue(
             sensorManager,
             thr, 4,
             NULL, NULL);
-    ASensorEventQueue_enableSensor(eventQ[1],
+    ASensorEventQueue_enableSensor( ev,
                                    acc);
-    ASensorEventQueue_setEventRate(eventQ[1],
+    ASensorEventQueue_setEventRate( ev,
                                    acc,
                                    sampling_rate);
     initFlags = initFlags | gyroFlag;
+    return ev;
 }
 
-void initialization_rotation(char flags)
+ASensorEventQueue* initialization_rotation(char flags)
 {
     ALooper *thr = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
     ALooper_acquire(thr);
     const ASensor *acc = ASensorManager_getDefaultSensor(
             sensorManager,
             ASENSOR_TYPE_ROTATION_VECTOR);
-    eventQ[2] = ASensorManager_createEventQueue(
+    ASensorEventQueue* ev = ASensorManager_createEventQueue(
             sensorManager,
             thr, 5,
             NULL, NULL);
-    ASensorEventQueue_enableSensor(eventQ[2],
+    ASensorEventQueue_enableSensor(ev,
                                    acc);
-    ASensorEventQueue_setEventRate(eventQ[2],
+    ASensorEventQueue_setEventRate(ev,
                                    acc,
                                    sampling_rate);
     initFlags = initFlags | rotationFlag;
+    return ev;
 }
-void initialization_magnetic(char flags)
+ASensorEventQueue* initialization_magnetic(char flags)
 {
     ALooper *thr = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
     ALooper_acquire(thr);
     const ASensor *acc = ASensorManager_getDefaultSensor(
             sensorManager,
             ASENSOR_TYPE_MAGNETIC_FIELD);
-    eventQ[3] = ASensorManager_createEventQueue(
+    ASensorEventQueue* ev = ASensorManager_createEventQueue(
             sensorManager,
             thr, 6,
             NULL, NULL);
-    ASensorEventQueue_enableSensor(eventQ[3],
+    ASensorEventQueue_enableSensor(ev,
                                    acc);
-    ASensorEventQueue_setEventRate(eventQ[3],
+    ASensorEventQueue_setEventRate(ev,
                                    acc,
                                    sampling_rate);
     initFlags = initFlags | magneticFlag;
+    return ev;
 }
 
 
 
 
-Vector4 accelGet()//accelerator
+Vector4 accelGet(ASensorEventQueue* ev)//accelerator
 {
-    if(!(accelFlag & initFlags) || ASensorEventQueue_hasEvents(eventQ[0]) < 1)
+    if(!(accelFlag & initFlags) || ASensorEventQueue_hasEvents(ev) < 1)
         return Vector4(0,0,0);
     ASensorEvent event;
     Vector4 rv;
     //odczytuje wszystkie zebrane eventy i bierze najnowszego na wyjscie (ostatnieg)
     ASensorEvent eventTMP;
-    while (ASensorEventQueue_getEvents(eventQ[0], &eventTMP, 1) > 0){
+    while (ASensorEventQueue_getEvents(ev, &eventTMP, 1) > 0){
         event = eventTMP;
     }//odbieramy event
-        __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
-                            event.acceleration.x, event.acceleration.y,
-                            event.acceleration.z);
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
+                        event.acceleration.x, event.acceleration.y,
+                        event.acceleration.z);
         rv.x = event.acceleration.x;
         rv.y = event.acceleration.y;
         rv.z = event.acceleration.z;
@@ -148,14 +150,14 @@ Vector4 accelGet()//accelerator
 }
 
 
-Vector4 gyroGet()//gyroscope
+Vector4 gyroGet(ASensorEventQueue* ev)//gyroscope
 {
     if(!(gyroFlag & initFlags))
         return Vector4(0,0,0);
     ASensorEvent event;
     Vector4 rv;
     ASensorEvent eventTMP;
-    while (ASensorEventQueue_getEvents(eventQ[1], &eventTMP, 1) > 0){
+    while (ASensorEventQueue_getEvents( ev, &eventTMP, 1) > 0){
         event = eventTMP;
     }
 
@@ -171,7 +173,7 @@ Vector4 gyroGet()//gyroscope
 }
 
 
-Vector4 rotationGet()//rotation
+Vector4 rotationGet(ASensorEventQueue* ev)//rotation
 {
     if (!(rotationFlag & initFlags)) {
         Vector4 rv=Vector4(0, 0, 0);
@@ -180,7 +182,7 @@ Vector4 rotationGet()//rotation
     ASensorEvent event;
     Vector4 rv;
     ASensorEvent eventTMP;
-    while (ASensorEventQueue_getEvents(eventQ[2], &eventTMP, 1) > 0){
+    while (ASensorEventQueue_getEvents(ev, &eventTMP, 1) > 0){
         event = eventTMP;
     }
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "rotation: x=%f y=%f z=%f",
@@ -194,20 +196,20 @@ Vector4 rotationGet()//rotation
     return rv;
 }
 
-Vector4 magneticGet()//magnetic
+Vector4 magneticGet(ASensorEventQueue* ev)//magnetic
 {
     if(!(magneticFlag & initFlags))
         return Vector4(0,0,0);
     ASensorEvent event;
     Vector4 rv;
     ASensorEvent eventTMP;
-    while (ASensorEventQueue_getEvents(eventQ[3], &eventTMP, 1) > 0){
+    while (ASensorEventQueue_getEvents(ev, &eventTMP, 1) > 0){
         event = eventTMP;
     }
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "accelerometer: x=%f y=%f z=%f",
                         event.magnetic.x, event.magnetic.y,
                         event.magnetic.z);
-						
+
         rv.x = event.magnetic.x;
         rv.y = event.magnetic.y;
         rv.z = event.magnetic.z;

@@ -12,6 +12,15 @@ Vector4 Vector4::operator+(Vector4 &a)
     temp.w = 1;
     return temp;
 }
+Vector4 Vector4::operator/(int &a)
+{
+    Vector4 temp;
+    temp.x = this->x / a;
+    temp.x = this->y / a;
+    temp.x = this->z / a;
+    temp.w = 1;
+    return temp;
+}
 Vector4& Vector4::operator=(const Vector4 &other)
 {
     if (this != &other)
@@ -21,6 +30,16 @@ Vector4& Vector4::operator=(const Vector4 &other)
     return *this;
 }
 
+Vector4& Vector4::operator=(const Matrix<float,4,1> &other)
+{
+
+        this->val[0] = other(0);
+        this->val[1] = other(1);
+        this->val[2] = other(2);
+        this->val[3] = other(3);
+
+    return *this;
+}
 Vector4::Vector4(float x,float y,float z)
 {
     this->x = x;
