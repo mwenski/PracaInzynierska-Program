@@ -66,4 +66,14 @@
         app:layout_constraintTop_toBottomOf="@+id/sample_text4"
         app:layout_constraintVertical_bias="0.667" />
 
+    <Button
+        android:id="@+id/buttonIOIO"
+        android:layout_width="406dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="640dp"
+        android:text="Turn the system on"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

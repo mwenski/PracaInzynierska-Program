@@ -3,45 +3,31 @@
 //
 
 #include "output.h"
+#include "config.h"
+#include "data.h"
 
-Filter::Filter() {
-    const int AVERAGE_BUFFER = 10;
-    m_arr[AVERAGE_BUFFER];
-    m_idx = 0;
+int read;
+
+extern "C" {
+JNIEXPORT void JNICALL
+Java_com_example_projekt_MainActivity_Reading(
+        JNIEnv *env,
+        jobject /* this */,
+        jint i) {
+    read = i;
 }
 
-Filter::~Filter() {
-    delete[] m_arr;
+JNIEXPORT jint JNICALL
+Java_com_example_projekt_MainActivity_SetSignal(
+        JNIEnv *env,
+jobject /* this */,
+    jint signal)
+{
+return signal;
 }
 
-
-float Filter::append(float val) {
-        m_arr[m_idx] = val;
-        m_idx++;
-        if (m_idx == AVERAGE_BUFFER)
-            m_idx = 0;
-        return avg();
-    }
-
-float Filter::avg() {
-        float sum = 0;
-        for (float x : m_arr)
-            sum += x;
-        return sum / AVERAGE_BUFFER;
-    }
-
-
-Filter m_filter;
-
-float ComputeOrientation(float orientation){
-    float output = 0.f;
-    /** 1 radian = 57.2957795 stopnia */
-    float x = orientation * 57.2957795f;
-    output = m_filter.append(x);
-    return output;
 }
-
-int ComputeSignal(int mode, float input){
+int ComputeSignal(int mode, float input){ //Może się przyda
     int signal = 50;
     int output = 0;
     switch (mode){
@@ -69,6 +55,46 @@ int ComputeSignal(int mode, float input){
     }
     return output;
 }
+
+
+/*Filter::Filter() {
+    const int AVERAGE_BUFFER = 10;
+    //m_arr[AVERAGE_BUFFER];
+    m_idx = 0;
+}
+
+Filter::~Filter() {
+
+}
+
+
+float Filter::append(float val) {
+        m_arr[m_idx] = val;
+        m_idx++;
+        if (m_idx == AVERAGE_BUFFER)
+            m_idx = 0;
+        return avg();
+    }
+
+float Filter::avg() {
+        float sum = 0;
+        for (float x : m_arr)
+            sum += x;
+        return sum / AVERAGE_BUFFER;
+    }
+
+
+Filter m_filter;
+
+float ComputeOrientation(float orientation){
+    float output = 0.f;
+    // 1 radian = 57.2957795 stopnia
+    float x = orientation * 57.2957795f;
+    output = m_filter.append(x);
+    return output;
+}
+ */
+
 
 
 

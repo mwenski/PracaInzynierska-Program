@@ -24,7 +24,7 @@ static double now_ms(void) {
     return 1000.0 * res.tv_sec + (double) res.tv_nsec / 1e6;
 
 }
-//pentla regulacji
+//pętla regulacji
 void *perform_work(void *arguments) {
 
     double tim = now_ms();

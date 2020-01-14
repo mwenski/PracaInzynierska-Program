@@ -5,9 +5,9 @@
     "number" : 2
   },
   {
-    "komentarz": "...",
-    "name": "nazwa2",
-    "number" : 2
+    "komentarz": "Częstotliwość sygnału PWM na wyjście pinów IOIO (w Hz)",
+    "name": "f_PWM",
+    "number" : 100
   },
   {
     "komentarz": "...",
