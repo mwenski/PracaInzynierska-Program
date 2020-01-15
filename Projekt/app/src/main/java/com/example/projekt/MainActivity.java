@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.widget.DigitalClock;
 import android.widget.Toast;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 
 import ioio.lib.api.AnalogInput;
 import ioio.lib.api.DigitalInput;
+import ioio.lib.api.PulseInput;
 import ioio.lib.api.DigitalOutput;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.PwmOutput;
@@ -48,7 +50,8 @@ import ioio.lib.util.android.IOIOService;
            System.loadLibrary("our-lib");
        }
 
-       public static native float Con(float in, float read);
+       public static native float Con(float in, float read); //uzyj tego
+       public static native void ConLoop(float in);
        public static native String Update(int i);
        public static native void Trajectory(String fp);
        public static native void Ini();
@@ -56,15 +59,25 @@ import ioio.lib.util.android.IOIOService;
        public static native int[] SetSignal();
        public static native void load(int a);
        public static native void Calibration();
+
+
         class Looper extends BaseIOIOLooper {
 
 
             private DigitalOutput a;
             private PwmOutput b;
-            private AnalogInput c;
+            private PulseInput c;
             private DigitalInput d;
-            public int f_PWM;
-
+            public int f_PWM; // Funkcje do wywoływania z C++
+            public float test(float a) { //uzyj by sterowac PWM z poziomu C++
+                try {
+                    b.setPulseWidth(a); //ustaw pwm
+                    return(c.getFrequency()); //zwroc czestotliwosc
+                } catch (Exception e) {
+                    System.out.println("Something went wrong");
+                    return(0);
+                }
+            }
             //Ta funkcja działa jak setup w Arduino
             @Override
             protected void setup() throws ConnectionLostException {
@@ -74,7 +87,8 @@ import ioio.lib.util.android.IOIOService;
                     Ini();
                     a = ioio_.openDigitalOutput(0,true);
 
-                    System.out.println(Con(1,2));
+                    b = ioio_.openPwmOutput(1,10000); //podaj pin
+                    c = ioio_.openPulseInput(2, PulseInput.PulseMode.FREQ); // podaj pin
 
 
 
@@ -90,7 +104,7 @@ import ioio.lib.util.android.IOIOService;
                 try {
                     /**Sterowanie w pętli tutaj*/
                     a.write(false);
-
+                    Con(1,2); //update jednego cyklu sterowania, zrobic loopa z odopwiednim czasem oraz podajac wartosc zadana oraz odczyt enkodera jako argumenty
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     ioio_.disconnect();

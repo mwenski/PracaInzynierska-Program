@@ -29,7 +29,7 @@ static double now_ms(void) {
 void *perform_work(void *arguments) {
     double tim = now_ms();
 
-    PID first = PID(1, 1, 1, 100);
+    PID pid = PID(1, 1, 1, 100);
     float out = 0;
     Six_state my;
     Reading br;
@@ -42,35 +42,54 @@ void *perform_work(void *arguments) {
         br.set(b.x, b.y,b.z);
         my.xyz[0](0) += br.val(0) * (0.1);
         out = my.xyz[0](0);
-        u = first.run(1 - out);
+        u = pid.run(1 - out);
         __android_log_print(ANDROID_LOG_INFO, "MainActivity", "OUTPUT IS %f U IS %f", out,
                             u);
 
     }
 
 }
+PID first = PID(1, 1, 1, 100);
 float con(float in, float sens)
 {
-PID first = PID(1, 1, 1, 100);
 float u = first.run( in - sens);
 __android_log_print(ANDROID_LOG_INFO, "MainActivity", " U IS %f",
   u);
 return u;
 }
 extern "C" {
+JNIEXPORT void JNICALL
+Java_com_example_projekt_MainActivity_ConLoop(//wersja funkcji dla petli w c++ a wysylaniu wyjscia w javie experymentalna
+        JNIEnv *env,
+        jobject /* this */,
+jfloat in) {
+    jenv = env;
+    jclass cls = jenv->FindClass("com/example/projekt/MainActivity/Looper");
+    jmethodID mid = jenv->GetMethodID(cls, "test", "(F)F");
+    float read = 0;
+    double tim = now_ms();
+    double T = 100; //okres w ms
+    while (1) {
+        while (now_ms() - tim < T);
+        tim = now_ms();
+        float out = con(in, read);
+        read = (jenv)->CallFloatMethod(cls, mid, out);
+}
+
+}
 JNIEXPORT float JNICALL
 Java_com_example_projekt_MainActivity_Con(
         JNIEnv *env,
         jobject /* this */,
-        jfloat in, jfloat read) {
+        jfloat in, jfloat read) { //wersja funkcji dla petl w javie
     return con(in,read);
-
 }
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Ini(
         JNIEnv *env,
 jobject /* this */) {
 jenv = env;
+
     initialization_manager(); //zawsze na początku
    const char *b = getSensorList().c_str();
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);
@@ -78,9 +97,7 @@ eventQ[0] = initialization_acceleration(0x01);
 eventQ[1] = initialization_gyroscope(0x01);
 eventQ[2] = initialization_rotation(0x01);
 eventQ[3] = initialization_magnetic(0x01);
-//auto cls = (jenv)->FindClass( "MainActivity");
-//auto mid = (jenv)->GetStaticMethodID( cls, "WW", "(I)I");
-//(jenv)->CallStaticVoidMethod(cls, mid );
+
 
 }
 JNIEXPORT void JNICALL

@@ -39,14 +39,12 @@ public class UIActivity extends AppCompatActivity {
 
     // this handler will receive a delayed message
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+       // MainActivity.Ini();
         Button buttonStart = findViewById(R.id.buttonIOIO);
         config.load(this); //wczytaj
         buttonStart.setOnClickListener(new View.OnClickListener() {
