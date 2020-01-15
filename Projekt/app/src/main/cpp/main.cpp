@@ -58,8 +58,14 @@ __android_log_print(ANDROID_LOG_INFO, "MainActivity", " U IS %f",
 return u;
 }
 extern "C" {
+JNIEXPORT float JNICALL
+Java_com_example_projekt_MainActivity_Con(
+        JNIEnv *env,
+        jobject /* this */,
+        jfloat in, jfloat read) {
+    return con(in,read);
 
-
+}
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Ini(
         JNIEnv *env,

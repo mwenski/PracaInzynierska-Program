@@ -11,8 +11,8 @@
         android:theme="@style/AppTheme" >
         <uses-library android:name="com.android.future.usb.accessory"
             android:required="false" />
-        <service android:name="OutputActivity" />
-        <activity android:name=".MainActivity" >
+        <service android:name="MainActivity" />
+        <activity android:name=".UIActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
