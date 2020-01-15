@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private static TextView tv[]=new TextView[4];
     private static int hr = 0;
     public int f_PWM;
+    int[] signals;
     // this handler will receive a delayed message
     private Handler mHandler = new Handler() {
 
@@ -126,14 +127,15 @@ public class MainActivity extends AppCompatActivity {
     public native void Calibration();
     public native void load(int a);
     public native void Reading(int i);
-    public native int SetSignal();
+    public native int[] SetSignal();
+
 
 
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("our-lib");
     }
-/*
+
     public class CommunicateWithIOIO extends IOIOActivity {
 
         class Looper extends BaseIOIOLooper {
@@ -168,8 +170,9 @@ public class MainActivity extends AppCompatActivity {
             public void loop() throws ConnectionLostException {
                 try {
                     //Sterowanie w pętli tutaj
+                    signals = SetSignal();
 
-                    b.setPulseWidth(SetSignal());
+                    b.setPulseWidth(1000);
                     a.write(false);
 
 
@@ -231,5 +234,5 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-*/
+
 }

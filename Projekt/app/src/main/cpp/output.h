@@ -3,6 +3,7 @@
 //
 
 #include <jni.h>
+#include <stdio.h>
 #ifndef PROJEKT_OUTPUT_H
 #define PROJEKT_OUTPUT_H
 
@@ -15,11 +16,11 @@ Java_com_example_projekt_MainActivity_Reading(
         jobject /* this */,
         jint i);
 
-JNIEXPORT jint JNICALL
+JNIEXPORT jintArray JNICALL
 Java_com_example_projekt_MainActivity_SetSignal(
         JNIEnv *env,
 jobject /* this */,
-jint signal);
+jint n);
 
 
 }

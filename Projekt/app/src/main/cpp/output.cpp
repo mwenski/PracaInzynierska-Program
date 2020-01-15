@@ -10,20 +10,31 @@ int read;
 
 extern "C" {
 JNIEXPORT void JNICALL
-Java_com_example_projekt_MainActivity_Reading(
+Java_com_example_projekt_MainActivity_Reading( //Odczyt z czujnika
         JNIEnv *env,
         jobject /* this */,
         jint i) {
     read = i;
 }
 
-JNIEXPORT jint JNICALL
-Java_com_example_projekt_MainActivity_SetSignal(
+JNIEXPORT jintArray JNICALL
+Java_com_example_projekt_MainActivity_SetSignal( //Przesył sygnału na IOIO
         JNIEnv *env,
 jobject /* this */,
-    jint signal)
+    jint n)
 {
-return signal;
+    int size;
+    jintArray signalArray;
+    signalArray = (*env).NewIntArray(size);
+        if (signalArray == NULL) {
+            return NULL; /* out of memory error thrown */
+        }
+
+        //Przypisz sygnały do tablicy tutaj
+    jint signal[size];
+    (*env).SetIntArrayRegion(signalArray, 0, size, signal);
+
+    return signalArray;
 }
 
 }
