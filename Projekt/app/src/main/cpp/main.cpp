@@ -17,6 +17,7 @@
 #include <time.h>
 //czas w ms
 ASensorEventQueue* eventQ[4];
+JNIEnv *jenv;
 static double now_ms(void) {
 
     struct timespec res;
@@ -26,7 +27,6 @@ static double now_ms(void) {
 }
 //pętla regulacji
 void *perform_work(void *arguments) {
-
     double tim = now_ms();
 
     PID first = PID(1, 1, 1, 100);
@@ -49,40 +49,32 @@ void *perform_work(void *arguments) {
     }
 
 }
-
+float con(float in, float sens)
+{
+PID first = PID(1, 1, 1, 100);
+float u = first.run( in - sens);
+__android_log_print(ANDROID_LOG_INFO, "MainActivity", " U IS %f",
+  u);
+return u;
+}
 extern "C" {
+
+
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Ini(
         JNIEnv *env,
 jobject /* this */) {
+jenv = env;
     initialization_manager(); //zawsze na początku
    const char *b = getSensorList().c_str();
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);
-    Matrix<float,4,4> al;
-    al = al.Zero();
-    al(0,0)= 1;
-    al(1,1) = 1;
-    al(2,2) = 1;
-    al(3,3) = 1;
-    Matrix<float,4,1> der;
-    der << 2,3,4,0;
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der(0),der(1),der(2));
-    der = al*der;
-    Matrix<float,2,2> alr;
-    alr = alr.Zero();
-    alr(0,0) = 1;
-    alr(1,1) = 2;
-
-    MatrixXf ab = alr.inverse();
-    Matrix<float,4,1> das = der;
-    der(0) = das(2);//3
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der(0),der(1),der(2));
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "MATRIX IS %f %f /n %f %f", ab(0,0),ab(0,1),ab(1,0), ab(1,1));
-
-    eventQ[0] = initialization_acceleration(0x01);
+eventQ[0] = initialization_acceleration(0x01);
 eventQ[1] = initialization_gyroscope(0x01);
 eventQ[2] = initialization_rotation(0x01);
 eventQ[3] = initialization_magnetic(0x01);
+//auto cls = (jenv)->FindClass( "MainActivity");
+//auto mid = (jenv)->GetStaticMethodID( cls, "WW", "(I)I");
+//(jenv)->CallStaticVoidMethod(cls, mid );
 
 }
 JNIEXPORT void JNICALL

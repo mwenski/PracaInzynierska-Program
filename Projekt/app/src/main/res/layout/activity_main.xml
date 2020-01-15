@@ -11,10 +11,9 @@
         android:id="@+id/sample_text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="32dp"
         android:text="Hello World!"
         android:textSize="18dp"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -61,18 +60,19 @@
         android:text="Calibration"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sample_text4"
-        app:layout_constraintVertical_bias="0.667" />
+        app:layout_constraintVertical_bias="0.358" />
 
     <Button
         android:id="@+id/buttonIOIO"
         android:layout_width="406dp"
         android:layout_height="52dp"
-        android:layout_marginTop="640dp"
+        android:layout_marginTop="396dp"
         android:text="Turn the system on"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

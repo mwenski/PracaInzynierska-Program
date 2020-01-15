@@ -1,5 +1,4 @@
 package com.example.projekt;
-
 //import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -83,18 +82,17 @@ import ioio.lib.util.android.IOIOService;
                     ioio_.disconnect();
                 }
             }
-/*
+
             //funkcja wywoływana, gdy połączenie zostanie przerwane
             @Override
             public void disconnected() {
-                toast("IOIO zostało odłączone");
+                System.out.println("The system have started");
             }
 
             //funkcja wywoływana, gdy wersja oprogramowania jest nieprawidłowa
             @Override
             public void incompatible() {
-                showVersions(ioio_, "Nieprawidłowa wersja oprogramowania!");
-            }*/
+            }
         }
 
         @Override

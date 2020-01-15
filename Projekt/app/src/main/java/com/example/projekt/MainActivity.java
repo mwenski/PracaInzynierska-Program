@@ -18,10 +18,12 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.InputStream;
-
+import ioio.lib.api.exception.ConnectionLostException;
+import ioio.lib.api.exception.IncompatibilityException;
 import ioio.lib.api.AnalogInput;
 import ioio.lib.api.DigitalInput;
 import ioio.lib.api.DigitalOutput;
+import ioio.lib.api.IOIOFactory;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.PwmOutput;
 import ioio.lib.api.exception.ConnectionLostException;
@@ -31,45 +33,51 @@ import ioio.lib.util.android.IOIOActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final int DISPLAY_DATA = 1;
-    private static TextView tv[]=new TextView[4];
     private static int hr = 0;
     public int f_PWM;
     int[] signals;
+    IOIO ioio;
+    int IOIOstate = 0;
     // this handler will receive a delayed message
-    private Handler mHandler = new Handler() {
 
-        @Override
-        public void handleMessage(Message msg) {
-            load();
-            if (msg.what == DISPLAY_DATA){
-                tv[0] = findViewById(R.id.sample_text1);
-                tv[1]= findViewById(R.id.sample_text2);
-                tv[2] = findViewById(R.id.sample_text3);
-                tv[3] = findViewById(R.id.sample_text4);
-            }
-            tv[0].setText(Update(1));
-            tv[1].setText(Update(2));
-            tv[2].setText(Update(3));
-            tv[3].setText(Update(4));
-            mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 50);
-        }
-    };
+    void funConnect(IOIO ioio) throws Exception{
+
+            ioio.waitForConnect();
+            IOIOstate = 1;
+    }
+    void funSetDigital(int pin, boolean state)
+    {   try {
+        DigitalOutput a;
+        a = ioio.openDigitalOutput(pin, true);
+        a.write(state);
+    }
+    catch(Exception e)
+    {
+        System.out.println("Something wrong");
+    }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         load();
-        //Trajectory(Environment.getExternalStorageDirectory().getPath());
         Ini();
-        mHandler.sendEmptyMessageDelayed(DISPLAY_DATA, 100);
 
         Button buttonStart = findViewById(R.id.buttonIOIO);
         buttonStart.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            public void onClick(View v)  {
                 System.out.println("The system have started");
-                Intent i= new Intent(MainActivity.this, OutputActivity.class);
-                startService(i);
+               // Intent i= new Intent(MainActivity.this, OutputActivity.class);
+               // startService(i);
+                ioio = IOIOFactory.create();
+                try{
+                    funConnect(ioio);
+                }
+                catch(Exception e ){
+                    System.out.println("Something wrong");
+                }
+                //zrob tutaj loopa z handlerem 
             }
         });
     }
@@ -134,102 +142,6 @@ public class MainActivity extends AppCompatActivity {
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("our-lib");
-    }
-
-    public class CommunicateWithIOIO extends IOIOActivity {
-
-        class Looper extends BaseIOIOLooper {
-
-            private DigitalOutput a;
-            private PwmOutput b;
-            private AnalogInput c;
-            private DigitalInput d;
-
-
-            @Override
-            protected void setup() throws ConnectionLostException {
-                showVersions(ioio_, "Połączono z IOIO!");
-                try {
-                    //Inicjalizacja działań płytki tutaj
-
-                    b = ioio_.openPwmOutput(3, f_PWM);
-                    a = ioio_.openDigitalOutput(0,true);
-
-
-
-
-
-
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    ioio_.disconnect();
-                }
-            }
-
-            @Override
-            public void loop() throws ConnectionLostException {
-                try {
-                    //Sterowanie w pętli tutaj
-                    signals = SetSignal();
-
-                    b.setPulseWidth(1000);
-                    a.write(false);
-
-
-
-
-
-                    Reading(0);
-
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    ioio_.disconnect();
-                }
-            }
-
-            //funkcja wywoływana, gdy połączenie zostanie przerwane
-            @Override
-            public void disconnected() {
-                toast("IOIO zostało odłączone");
-            }
-
-            //funkcja wywoływana, gdy wersja oprogramowania jest nieprawidłowa
-            @Override
-            public void incompatible() {
-                showVersions(ioio_, "Nieprawidłowa wersja oprogramowania!");
-            }
-        }
-
-        @Override
-        protected IOIOLooper createIOIOLooper() {
-            return new Looper();
-        }
-
-        //Widget z komunikatami
-        private void toast(final String message) {
-            final Context context = this;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-        //Dane o IOIO
-        private void showVersions(IOIO ioio, String title) {
-            toast(String.format("%s\n" +
-                            "IOIOLib: %s\n" +
-                            "Application firmware: %s\n" +
-                            "Bootloader firmware: %s\n" +
-                            "Hardware: %s",
-                    title,
-                    ioio.getImplVersion(IOIO.VersionType.IOIOLIB_VER),
-                    ioio.getImplVersion(IOIO.VersionType.APP_FIRMWARE_VER),
-                    ioio.getImplVersion(IOIO.VersionType.BOOTLOADER_VER),
-                    ioio.getImplVersion(IOIO.VersionType.HARDWARE_VER)));
-        }
-
     }
 
 
