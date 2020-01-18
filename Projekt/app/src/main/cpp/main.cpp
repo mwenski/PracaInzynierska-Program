@@ -55,6 +55,8 @@ PID first = PID(1, 1, 1, 100);
 float u = first.run( in - sens);
 __android_log_print(ANDROID_LOG_INFO, "MainActivity", " U IS %f",
   u);
+if(u>1) u = 1;
+if(u<0) u = 0;
 return u;
 }
 extern "C" {

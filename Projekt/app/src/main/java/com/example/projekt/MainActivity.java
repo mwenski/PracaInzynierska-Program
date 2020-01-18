@@ -6,10 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
-import android.app.Notification;
-import android.app.NotificationManager;
+//import android.app.Notification;
+//import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -18,6 +19,7 @@ import androidx.core.app.NotificationManagerCompat;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,6 +27,7 @@ import ioio.lib.api.AnalogInput;
 import ioio.lib.api.DigitalInput;
 import ioio.lib.api.DigitalOutput;
 import ioio.lib.api.IOIO;
+import ioio.lib.api.PulseInput;
 import ioio.lib.api.PwmOutput;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
@@ -63,7 +66,9 @@ import ioio.lib.util.android.IOIOService;
             private PwmOutput b;
             private AnalogInput c;
             private DigitalInput d;
-            public int f_PWM;
+            private PulseInput pulse;
+            private float freqHz;
+            public int f_PWM = 25000;
 
             //Ta funkcja działa jak setup w Arduino
             @Override
@@ -73,11 +78,16 @@ import ioio.lib.util.android.IOIOService;
                     /**Inicjalizacja działań płytki tutaj*/
                     Ini();
                     a = ioio_.openDigitalOutput(0,true);
-
-                    System.out.println(Con(1,2));
-
-
-
+                    b = ioio_.openPwmOutput(new DigitalOutput.Spec(14, DigitalOutput.Spec.Mode.OPEN_DRAIN), f_PWM);
+                    pulse = ioio_.openPulseInput(11, PulseInput.PulseMode.FREQ);
+                    for(int p=0; p<3; p++) {
+                        a.write(false);
+                        Thread.sleep(300);
+                        a.write(true);
+                        Thread.sleep(300);
+                    }
+                    freqHz = 0;
+                    System.out.println(Con(1, 2));
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     ioio_.disconnect();
@@ -89,9 +99,16 @@ import ioio.lib.util.android.IOIOService;
             public void loop() throws ConnectionLostException {
                 try {
                     /**Sterowanie w pętli tutaj*/
-                    a.write(false);
+                        a.write(false);
+                        b.setDutyCycle(Con(f_PWM, freqHz));
+                        b.setDutyCycle(0);
+                       // Thread.sleep(5000);
+                        float pulseSeconds = pulse.getDuration();
+                        float freqHz = pulse.getFrequency();
+                        Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz);
+                       // Thread.sleep((1/f_PWM)*1000);
+                        Thread.sleep(100);
 
-                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     ioio_.disconnect();
                 }
@@ -114,42 +131,7 @@ import ioio.lib.util.android.IOIOService;
             return new Looper();
         }
 
-       @Override
-       public int onStartCommand(Intent intent, int flags, int startId) {
-           int result = super.onStartCommand(intent, flags, startId);
-            //TODO: Dokończyć powiadomienia
-       /*    if (intent != null && intent.getAction() != null
-                   && intent.getAction().equals("stop")) {
-               // User clicked the notification. Need to stop the service.
-               nm.cancel(0);
-               stopSelf();
-           } else {
-               // Service starting. Create a notification.
-                */
-               Notification.Builder builder = new Notification.Builder(this)
-                       .setSmallIcon(R.drawable.ic_launcher_foreground)
-                       .setContentTitle("Układ z modułem IOIO działa")
-                       .setContentText("Aby zatrzymać pracę układu, należy wybrać tę notyfikację ")
-                       .setContentIntent(PendingIntent.getService(this, 0, new Intent(
-                               "stop", null, this, this.getClass()), 0));
-               //Notification notification = builder.build();
-           //NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-              //
-           //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this)
-           NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-               nm.notify(0, builder.build());
-               //notification.flags |= Notification.FLAG_ONGOING_EVENT;
-               //nm.notify(0, notification);
-           //}
-           return result;
-       }
-
-
-
-
-
         /*
-
         //Dolny pasek
         private void toast(final String message) {
             final Context context = this;
