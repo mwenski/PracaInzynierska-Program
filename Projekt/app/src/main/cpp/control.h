@@ -13,7 +13,7 @@ class PID{ // Klasa regulatora PID o wzorze Kp * e(t) + Ki * (sum 0 -> t e(t)) +
     float Kp;
     float Ki;
     float Kd;
-    double T;
+    float T;
     float memi = 0;
     float memd = 0;
 public:

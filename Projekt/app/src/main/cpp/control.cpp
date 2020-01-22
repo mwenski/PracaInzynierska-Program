@@ -27,8 +27,8 @@ void PID::clearMemory()
 float PID::run(float in){
 
     float ret;
-    memi+= in*(T/1000);
-    ret = memi*Ki + in*Kp + ((in-memd)/(T/1000))*Kd;
+    memi+= in*(T/1000.0);
+    ret = memi*Ki + in*Kp + ((in-memd)/(T/1000.0))*Kd;
     memd = in;
     return ret;
 }

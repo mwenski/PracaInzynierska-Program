@@ -95,7 +95,7 @@ public class UIActivity extends AppCompatActivity {
         }
     }
     public void Decfun() {
-        MainActivity.instance. dec();
+        MainActivity.instance.dec();
     }
         public void Infun() {
                 MainActivity.instance.inc();

@@ -50,10 +50,10 @@ void *perform_work(void *arguments) {
     }
 
 }
-PID first = PID(1, 1, 1, Tp);
+PID *first;
 float con(float in, float sens)
 {
-float u = first.run( in - sens);
+float u = first->run( in - sens);
 __android_log_print(ANDROID_LOG_INFO, "MainActivity", " U IS %f",
   u);
 if(u>1) u = 1;
@@ -61,12 +61,14 @@ if(u<0) u = 0;
 return u;
 }
 extern "C" {
-JNIEXPORT float JNICALL
+JNIEXPORT jfloat JNICALL
 Java_com_example_projekt_MainActivity_Con(
         JNIEnv *env,
         jobject /* this */,
         jfloat in, jfloat read) {
    // float readfromC = requestTach(jenv,jobj);
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", " in IS %f, read IS %f",
+                        in,read);
     return con(in,read);
 
 }
@@ -77,6 +79,7 @@ jobject obj /* this */) {
 jenv = env;
 jobj = obj;
 Tp =100;
+first = new PID(0.01,0.01, 0.0001, Tp);
     initialization_manager(); //zawsze na początku
    const char *b = getSensorList().c_str();
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);

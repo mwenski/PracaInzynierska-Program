@@ -123,9 +123,9 @@ public class MainActivity extends IOIOService {
                         if(synct == true) {
                             synct = false;
                             a.write(false);
-                            b.setDutyCycle(Con(targetFreqHz, freqHz));
                             float pulseSeconds = pulse.getDuration();
                             freqHz = pulse.getFrequency();
+                            b.setDutyCycle(Con(targetFreqHz, freqHz));
                              UIActivity.upDate("RPM is: " + freqHz * 60 / 2);
                             Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz);
                         }

@@ -8,7 +8,7 @@ extern int config_variable_a;
 extern int sampling_rate;
 extern bool button;
 extern int gravitation;
-extern double Tp;
+extern float Tp;
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_load(
