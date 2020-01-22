@@ -76,6 +76,7 @@ Java_com_example_projekt_MainActivity_Ini(
 jobject obj /* this */) {
 jenv = env;
 jobj = obj;
+Tp =100;
     initialization_manager(); //zawsze na początku
    const char *b = getSensorList().c_str();
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);

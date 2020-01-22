@@ -54,6 +54,9 @@ public class MainActivity extends IOIOService {
        public static native int[] SetSignal();
        public static native void load(int a);
        public static native void Calibration();
+    public static float tacho(){
+        return instance.freqHz;
+    }
        public static Looper instance;
         class Looper extends BaseIOIOLooper {
 
@@ -79,9 +82,7 @@ public class MainActivity extends IOIOService {
                 if (targetFreqHz > 60)
                     targetFreqHz = 60;
             }
-            public float tacho(){
-                return freqHz;
-            }
+
             class Helper extends TimerTask
             {
                 public void run()

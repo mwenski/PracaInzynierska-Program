@@ -234,8 +234,8 @@ ACameraDevice_stateCallbacks cameraDeviceCallbacks = {
         .onError = onError,
 };
 float requestTach(JNIEnv* jenv, jobject jobj) {
-    jclass cls = jenv->GetObjectClass(jobj);
+    jclass cls = jenv->FindClass("com/example/projekt/MainActivity");
     jmethodID mid = jenv->GetMethodID(cls, "tacho", "()F");
-   return (jenv)->CallFloatMethod(cls, mid, jobj);
+   return (jenv)->CallStaticFloatMethod(cls, mid);
 
 }
