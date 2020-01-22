@@ -69,7 +69,6 @@ public class MainActivity extends IOIOService {
             private double Tp = 100; //w milisekundach
             private Timer tim;
             public int f_PWM = 25000;
-
             public void dec(){
                 targetFreqHz -= 1;
                 if (targetFreqHz < 0)
@@ -94,6 +93,7 @@ public class MainActivity extends IOIOService {
             @Override
             protected void setup() throws ConnectionLostException {
                 try {
+
                     Ini();
                     a = ioio_.openDigitalOutput(0,true);
                     b = ioio_.openPwmOutput(new DigitalOutput.Spec(14, DigitalOutput.Spec.Mode.OPEN_DRAIN), f_PWM);
@@ -151,7 +151,7 @@ public class MainActivity extends IOIOService {
         protected IOIOLooper createIOIOLooper() {
             instance = new Looper();
             return instance;
-            //return new Looper()
+            //return new Looper();
         }
 
 

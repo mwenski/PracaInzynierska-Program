@@ -41,7 +41,6 @@ public class UIActivity extends AppCompatActivity {
     // this handler will receive a delayed message
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         out = findViewById(R.id.tach_text);
@@ -84,7 +83,7 @@ public class UIActivity extends AppCompatActivity {
         }
     }
     public void Decfun() {
-        MainActivity.instance.dec();
+        MainActivity.instance. dec();
     }
         public void Infun() {
                 MainActivity.instance.inc();
