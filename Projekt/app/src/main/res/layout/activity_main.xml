@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Hello World!"
+        android:text="Hi your accelerometer reads (x,y,z) X: Y: Z:"
         android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:text="Hello World!"
+        android:text="Hi your gyroscope reads (x,y,z) X: Y: Z:"
         android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:text="Hello World!"
+        android:text="Hi your rotation vector reads (x,y,z) X: Y: Z:"
         android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:text="Hello World!"
+        android:text="Hi your magnetic field reads (x,y,z) X: Y: Z:"
         android:textSize="18dp"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -65,15 +65,17 @@
         app:layout_constraintTop_toBottomOf="@+id/sample_text4"
         app:layout_constraintVertical_bias="0.358" />
 
+
     <Button
         android:id="@+id/buttonIOIO"
-        android:layout_width="406dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="396dp"
-        android:text="Turn the system on"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Turn the system on/off"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.637" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

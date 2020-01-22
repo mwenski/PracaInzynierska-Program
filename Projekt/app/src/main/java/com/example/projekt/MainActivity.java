@@ -42,11 +42,6 @@ import ioio.lib.util.android.IOIOService;
            return null;
        }
 
-       //  @Override
-      //  protected void onCreate(Bundle savedInstanceState) {
-      //      super.onCreate(savedInstanceState);
-            //  setContentView(R.layout.activity_main);
-      //  }
        static {
            System.loadLibrary("our-lib");
        }
@@ -70,12 +65,10 @@ import ioio.lib.util.android.IOIOService;
             private float freqHz;
             public int f_PWM = 25000;
 
-            //Ta funkcja działa jak setup w Arduino
+            //Funkcja inicjalizująca
             @Override
             protected void setup() throws ConnectionLostException {
-               // showVersions(ioio_, "Połączono z IOIO!");
                 try {
-                    /**Inicjalizacja działań płytki tutaj*/
                     Ini();
                     a = ioio_.openDigitalOutput(0,true);
                     b = ioio_.openPwmOutput(new DigitalOutput.Spec(14, DigitalOutput.Spec.Mode.OPEN_DRAIN), f_PWM);
@@ -94,19 +87,15 @@ import ioio.lib.util.android.IOIOService;
                 }
             }
 
-            //Ta funkcja działa jak loop w Arduino
+            //Funkcja działająca w pętli
             @Override
             public void loop() throws ConnectionLostException {
                 try {
-                    /**Sterowanie w pętli tutaj*/
                         a.write(false);
                         b.setDutyCycle(Con(f_PWM, freqHz));
-                        b.setDutyCycle(0);
-                       // Thread.sleep(5000);
                         float pulseSeconds = pulse.getDuration();
-                        float freqHz = pulse.getFrequency();
+                        freqHz = pulse.getFrequency();
                         Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz);
-                       // Thread.sleep((1/f_PWM)*1000);
                         Thread.sleep(100);
 
                 } catch (InterruptedException e) {
@@ -114,15 +103,16 @@ import ioio.lib.util.android.IOIOService;
                 }
             }
 
-            //funkcja wywoływana, gdy połączenie zostanie przerwane
+
             @Override
             public void disconnected() {
-                System.out.println("The system have started");
+                System.out.println("IOIO has benn disconnected");
             }
 
-            //funkcja wywoływana, gdy wersja oprogramowania jest nieprawidłowa
+
             @Override
             public void incompatible() {
+                System.out.println("Incompatible version of software");
             }
         }
 
@@ -131,33 +121,7 @@ import ioio.lib.util.android.IOIOService;
             return new Looper();
         }
 
-        /*
-        //Dolny pasek
-        private void toast(final String message) {
-            final Context context = this;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                }
-            });
-        }
 
-        //Dane o IOIO
-        private void showVersions(IOIO ioio, String title) {
-            toast(String.format("%s\n" +
-                            "IOIOLib: %s\n" +
-                            "Application firmware: %s\n" +
-                            "Bootloader firmware: %s\n" +
-                            "Hardware: %s",
-                    title,
-                    ioio.getImplVersion(IOIO.VersionType.IOIOLIB_VER),
-                    ioio.getImplVersion(IOIO.VersionType.APP_FIRMWARE_VER),
-                    ioio.getImplVersion(IOIO.VersionType.BOOTLOADER_VER),
-                    ioio.getImplVersion(IOIO.VersionType.HARDWARE_VER)));
-        }
-
-*/
 
     }
 

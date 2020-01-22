@@ -36,7 +36,7 @@ import ioio.lib.util.IOIOConnectionManager;
 
 public class UIActivity extends AppCompatActivity {
     private static final int DISPLAY_DATA = 1;
-
+    boolean s = false;
     // this handler will receive a delayed message
 
 
@@ -51,9 +51,16 @@ public class UIActivity extends AppCompatActivity {
         config.load(this); //wczytaj
         buttonStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)  {
-                System.out.println("The system have started");
-               Intent i= new Intent(UIActivity.this, MainActivity.class);
-                startService(i);
+                Intent i= new Intent(UIActivity.this, MainActivity.class);
+                if(s==false){
+                    System.out.println("The system have started");
+                    // Intent i= new Intent(UIActivity.this, MainActivity.class);
+                    startService(i);
+                    s=true;
+                }else{
+                    stopService(i);
+                    s=false;
+                }
             }
         });
     }
