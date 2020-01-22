@@ -65,7 +65,7 @@ public class MainActivity extends IOIOService {
             private PulseInput pulse;
             private float freqHz;
             private float targetFreqHz = 30;
-            private boolean synct = true;
+            public boolean synct = true;
             private double Tp = 100; //w milisekundach
             private Timer tim;
             public int f_PWM = 25000;
@@ -107,9 +107,9 @@ public class MainActivity extends IOIOService {
                     freqHz = 0;
                     System.out.println(Con(1, 2));
                     Thread.sleep(100);
-                    tim = new Timer();
+                    tim = new Timer(true);
                     TimerTask task = new Helper();
-                    tim.schedule(task,100,(long)Tp);
+                    tim.schedule(task,100, (long) Tp);
                 } catch (InterruptedException e) {
                     ioio_.disconnect();
                 }

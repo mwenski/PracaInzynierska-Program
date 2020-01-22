@@ -9,6 +9,8 @@ PID::PID(float p, float i, float d, float t)
     Ki=i;
     Kd=d;
     T=t;
+    memd = 0;
+    memi = 0;
 }
 void PID::setParams(float p, float i, float d, double t)
 {
