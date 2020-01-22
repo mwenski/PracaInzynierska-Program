@@ -3,6 +3,7 @@
 #define PROJEKT_SENSOR_H
 
 //#include <GLES2/gl2.h>
+#include <JNI.h>
 #include "vectors.h"
 #include <android/sensor.h>
 #include <android/log.h>
@@ -30,4 +31,6 @@ Vector4 accelGet(ASensorEventQueue* ev);
 Vector4 gyroGet(ASensorEventQueue* ev);
 Vector4 rotationGet(ASensorEventQueue* ev);
 Vector4 magneticGet(ASensorEventQueue* ev);
+float requestTach(JNIEnv* jenv, jobject jobj);
+
 #endif //PROJEKT_SENSOR_H

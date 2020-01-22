@@ -233,3 +233,9 @@ ACameraDevice_stateCallbacks cameraDeviceCallbacks = {
         .onDisconnected = onDisconnected,
         .onError = onError,
 };
+float requestTach(JNIEnv* jenv, jobject jobj) {
+    jclass cls = jenv->FindClass("com/example/projekt/MainActivity/Looper");
+    jmethodID mid = jenv->GetMethodID(cls, "tacho", "()F");
+   return (jenv)->CallFloatMethod(cls, mid, jobj);
+
+}

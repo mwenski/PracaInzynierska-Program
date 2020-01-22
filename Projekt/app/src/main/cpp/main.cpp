@@ -18,6 +18,7 @@
 //czas w ms
 ASensorEventQueue* eventQ[4];
 JNIEnv *jenv;
+jobject jobj;
 static double now_ms(void) {
 
     struct timespec res;
@@ -49,9 +50,9 @@ void *perform_work(void *arguments) {
     }
 
 }
+PID first = PID(1, 1, 1, Tp);
 float con(float in, float sens)
 {
-PID first = PID(1, 1, 1, 100);
 float u = first.run( in - sens);
 __android_log_print(ANDROID_LOG_INFO, "MainActivity", " U IS %f",
   u);
@@ -65,14 +66,16 @@ Java_com_example_projekt_MainActivity_Con(
         JNIEnv *env,
         jobject /* this */,
         jfloat in, jfloat read) {
-    return con(in,read);
+    float readfromC = requestTach(jenv,jobj);
+    return con(in,readfromC);
 
 }
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Ini(
         JNIEnv *env,
-jobject /* this */) {
+jobject obj /* this */) {
 jenv = env;
+jobj = obj;
     initialization_manager(); //zawsze na początku
    const char *b = getSensorList().c_str();
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);
@@ -80,9 +83,7 @@ eventQ[0] = initialization_acceleration(0x01);
 eventQ[1] = initialization_gyroscope(0x01);
 eventQ[2] = initialization_rotation(0x01);
 eventQ[3] = initialization_magnetic(0x01);
-//auto cls = (jenv)->FindClass( "MainActivity");
-//auto mid = (jenv)->GetStaticMethodID( cls, "WW", "(I)I");
-//(jenv)->CallStaticVoidMethod(cls, mid );
+
 
 }
 JNIEXPORT void JNICALL

@@ -11,7 +11,6 @@ import android.widget.Toast;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -33,8 +32,9 @@ import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
 import ioio.lib.util.IOIOLooper;
 import ioio.lib.util.android.IOIOService;
-
-   public class MainActivity extends IOIOService {
+import java.util.Timer;
+import java.util.TimerTask;
+public class MainActivity extends IOIOService {
 
        @Nullable
        @Override
@@ -54,6 +54,7 @@ import ioio.lib.util.android.IOIOService;
        public static native int[] SetSignal();
        public static native void load(int a);
        public static native void Calibration();
+       public static Looper instance;
         class Looper extends BaseIOIOLooper {
 
 
@@ -63,8 +64,32 @@ import ioio.lib.util.android.IOIOService;
             private DigitalInput d;
             private PulseInput pulse;
             private float freqHz;
+            private float targetFreqHz = 30;
+            private boolean synct = true;
+            private double Tp = 100; //w milisekundach
+            private Timer tim;
             public int f_PWM = 25000;
 
+            public void dec(){
+                targetFreqHz -= 1;
+                if (targetFreqHz < 0)
+                    targetFreqHz = 0;
+            }
+            public void inc(){
+                targetFreqHz += 1;
+                if (targetFreqHz > 60)
+                    targetFreqHz = 60;
+            }
+            public float tacho(){
+                return freqHz;
+            }
+            class Helper extends TimerTask
+            {
+                public void run()
+                {
+                    synct = true;
+                }
+            }
             //Funkcja inicjalizująca
             @Override
             protected void setup() throws ConnectionLostException {
@@ -82,6 +107,9 @@ import ioio.lib.util.android.IOIOService;
                     freqHz = 0;
                     System.out.println(Con(1, 2));
                     Thread.sleep(100);
+                    tim = new Timer();
+                    TimerTask task = new Helper();
+                    tim.schedule(task,0,(long)Tp);
                 } catch (InterruptedException e) {
                     ioio_.disconnect();
                 }
@@ -91,12 +119,15 @@ import ioio.lib.util.android.IOIOService;
             @Override
             public void loop() throws ConnectionLostException {
                 try {
-                        a.write(false);
-                        b.setDutyCycle(Con(f_PWM, freqHz));
-                        float pulseSeconds = pulse.getDuration();
-                        freqHz = pulse.getFrequency();
-                        Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz);
-                        Thread.sleep(100);
+                        if(synct) {
+                            synct = false;
+                            a.write(false);
+                            b.setDutyCycle(Con(targetFreqHz, freqHz));
+                            float pulseSeconds = pulse.getDuration();
+                            freqHz = pulse.getFrequency();
+                            UIActivity.out.setText("RPM is: " + freqHz * 60 / 2);
+                            Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz);
+                        }
 
                 } catch (InterruptedException e) {
                     ioio_.disconnect();
@@ -118,7 +149,9 @@ import ioio.lib.util.android.IOIOService;
 
         @Override
         protected IOIOLooper createIOIOLooper() {
-            return new Looper();
+            instance = new Looper();
+            return instance;
+            //return new Looper()
         }
 
 

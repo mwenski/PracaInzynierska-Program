@@ -37,18 +37,28 @@ import ioio.lib.util.IOIOConnectionManager;
 public class UIActivity extends AppCompatActivity {
     private static final int DISPLAY_DATA = 1;
     boolean s = false;
+    public static TextView out;
     // this handler will receive a delayed message
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        out = findViewById(R.id.tach_text);
+        Button buttonIn = findViewById(R.id.INCREASE);
+        Button buttonDec = findViewById(R.id.INCREASE);
         Button buttonStart = findViewById(R.id.buttonIOIO);
         config.load(this); //wczytaj
+        buttonIn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)  {
+                Infun();
+            }
+        });
+        buttonDec.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v)  {
+                    Decfun();
+                }
+            });
         buttonStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)  {
                 Intent i= new Intent(UIActivity.this, MainActivity.class);
@@ -72,9 +82,15 @@ public class UIActivity extends AppCompatActivity {
                 break;
             }
         }
-
-
     }
+    public void Decfun() {
+        MainActivity.instance.dec();
+    }
+        public void Infun() {
+                MainActivity.instance.inc();
+                }
+
+
 
 
     /**
