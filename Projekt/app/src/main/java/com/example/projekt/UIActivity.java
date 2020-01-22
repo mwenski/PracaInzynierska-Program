@@ -38,13 +38,25 @@ public class UIActivity extends AppCompatActivity {
     private static final int DISPLAY_DATA = 1;
     boolean s = false;
     public static TextView out;
+    public static UIActivity instanceUI;
     // this handler will receive a delayed message
+    public static void upDate(String a)
+    {
+        final String b = a;
+        instanceUI.runOnUiThread(new Runnable() {
+            public void run() {
+        out.setText(b);
+            }
+    });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        instanceUI = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         out = findViewById(R.id.tach_text);
-        Button buttonIn = findViewById(R.id.INCREASE);
+        Button buttonIn = findViewById(R.id.DECREASE);
         Button buttonDec = findViewById(R.id.INCREASE);
         Button buttonStart = findViewById(R.id.buttonIOIO);
         config.load(this); //wczytaj

@@ -66,8 +66,8 @@ Java_com_example_projekt_MainActivity_Con(
         JNIEnv *env,
         jobject /* this */,
         jfloat in, jfloat read) {
-    float readfromC = requestTach(jenv,jobj);
-    return con(in,readfromC);
+   // float readfromC = requestTach(jenv,jobj);
+    return con(in,read);
 
 }
 JNIEXPORT void JNICALL

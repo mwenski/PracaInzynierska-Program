@@ -109,7 +109,7 @@ public class MainActivity extends IOIOService {
                     Thread.sleep(100);
                     tim = new Timer();
                     TimerTask task = new Helper();
-                    tim.schedule(task,0,(long)Tp);
+                    tim.schedule(task,100,(long)Tp);
                 } catch (InterruptedException e) {
                     ioio_.disconnect();
                 }
@@ -119,13 +119,13 @@ public class MainActivity extends IOIOService {
             @Override
             public void loop() throws ConnectionLostException {
                 try {
-                        if(synct) {
+                        if(synct == true) {
                             synct = false;
                             a.write(false);
                             b.setDutyCycle(Con(targetFreqHz, freqHz));
                             float pulseSeconds = pulse.getDuration();
                             freqHz = pulse.getFrequency();
-                            UIActivity.out.setText("RPM is: " + freqHz * 60 / 2);
+                             UIActivity.upDate("RPM is: " + freqHz * 60 / 2);
                             Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz);
                         }
 
