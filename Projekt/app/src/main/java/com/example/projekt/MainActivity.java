@@ -36,127 +36,128 @@ import java.util.Timer;
 import java.util.TimerTask;
 public class MainActivity extends IOIOService {
 
-       @Nullable
-       @Override
-       public IBinder onBind(Intent intent) {
-           return null;
-       }
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
-       static {
-           System.loadLibrary("our-lib");
-       }
+    static {
+        System.loadLibrary("our-lib");
+    }
 
-       public static native float Con(float in, float read);
-       public static native String Update(int i);
-       public static native void Trajectory(String fp);
-       public static native void Ini();
-       public static native void Reading(int i);
-       public static native int[] SetSignal();
-       public static native void load(int a);
-       public static native void Calibration();
+    public static native float Con(float in, float read);
+    public static native String Update(int i);
+    public static native void Trajectory(String fp);
+    public static native void Ini();
+    public static native void Reading(int i);
+    public static native int[] SetSignal();
+    public static native void load(int a);
+    public static native void Calibration();
     public static float tacho(){
         return instance.freqHz;
     }
-       public static Looper instance;
-        class Looper extends BaseIOIOLooper {
+    public static Looper instance;
+    class Looper extends BaseIOIOLooper {
 
 
-            private DigitalOutput a;
-            private PwmOutput b;
-            private AnalogInput c;
-            private DigitalInput d;
-            private PulseInput pulse;
-            private float freqHz;
-            private float targetFreqHz = 30;
-            public boolean synct = true;
-            private double Tp = 100; //w milisekundach
-            private Timer tim;
-            public int f_PWM = 25000;
-            public void dec(){
-                targetFreqHz -= 1;
-                if (targetFreqHz < 0)
-                    targetFreqHz = 0;
-            }
-            public void inc(){
-                targetFreqHz += 1;
-                if (targetFreqHz > 60)
-                    targetFreqHz = 60;
-            }
+        private DigitalOutput a;
+        private PwmOutput b;
+        private AnalogInput c;
+        private DigitalInput d;
+        private PulseInput pulse;
+        public float freqHz;
+        public float targetFreqHz;
+        public boolean synct = true;
+        private double Tp = 100; //w milisekundach
+        private Timer tim;
+        public int f_PWM = 25000;
+        public void dec(){
+            targetFreqHz = targetFreqHz - (float)1;
+            if (targetFreqHz < 0)
+                targetFreqHz = 0;
+        }
+        public void inc(){
+            targetFreqHz = targetFreqHz + (float)1;
+            if (targetFreqHz > 150)
+                targetFreqHz = 150;
+        }
 
-            class Helper extends TimerTask
+        class Helper extends TimerTask
+        {
+            public void run()
             {
-                public void run()
-                {
-                    synct = true;
-                }
-            }
-            //Funkcja inicjalizująca
-            @Override
-            protected void setup() throws ConnectionLostException {
-                try {
-
-                    Ini();
-                    a = ioio_.openDigitalOutput(0,true);
-                    b = ioio_.openPwmOutput(new DigitalOutput.Spec(14, DigitalOutput.Spec.Mode.OPEN_DRAIN), f_PWM);
-                    pulse = ioio_.openPulseInput(11, PulseInput.PulseMode.FREQ);
-                    for(int p=0; p<3; p++) {
-                        a.write(false);
-                        Thread.sleep(300);
-                        a.write(true);
-                        Thread.sleep(300);
-                    }
-                    freqHz = 0;
-                    System.out.println(Con(1, 2));
-                    Thread.sleep(100);
-                    tim = new Timer(true);
-                    TimerTask task = new Helper();
-                    tim.schedule(task,100, (long) Tp);
-                } catch (InterruptedException e) {
-                    ioio_.disconnect();
-                }
-            }
-
-            //Funkcja działająca w pętli
-            @Override
-            public void loop() throws ConnectionLostException {
-                try {
-                        if(synct == true) {
-                            synct = false;
-                            a.write(false);
-                            float pulseSeconds = pulse.getDuration();
-                            freqHz = pulse.getFrequency();
-                            b.setDutyCycle(Con(targetFreqHz, freqHz));
-                             UIActivity.upDate("RPM is: " + freqHz * 60 / 2);
-                            Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz);
-                        }
-
-                } catch (InterruptedException e) {
-                    ioio_.disconnect();
-                }
-            }
-
-
-            @Override
-            public void disconnected() {
-                System.out.println("IOIO has benn disconnected");
-            }
-
-
-            @Override
-            public void incompatible() {
-                System.out.println("Incompatible version of software");
+                synct = true;
             }
         }
+        //Funkcja inicjalizująca
+        @Override
+        protected void setup() throws ConnectionLostException {
+            try {
+                instance=this;
+                Ini();
+                a = ioio_.openDigitalOutput(0,true);
+                b = ioio_.openPwmOutput(new DigitalOutput.Spec(14, DigitalOutput.Spec.Mode.OPEN_DRAIN), f_PWM);
+                DigitalInput.Spec Spek = new DigitalInput.Spec(11,DigitalInput.Spec.Mode.FLOATING);
+                pulse = ioio_.openPulseInput(Spek , PulseInput.ClockRate.RATE_250KHz,PulseInput.PulseMode.FREQ,true);
+                for(int p=0; p<3; p++) {
+                    a.write(false);
+                    Thread.sleep(300);
+                    a.write(true);
+                    Thread.sleep(300);
+                }
+                freqHz = 0;
+                targetFreqHz = 50;
+                Thread.sleep(100);
+                tim = new Timer(true);
+                TimerTask task = new Helper();
+                tim.schedule(task,100, (long) Tp);
+            } catch (InterruptedException e) {
+                ioio_.disconnect();
+            }
+        }
+
+        //Funkcja działająca w pętli
+        @Override
+        public void loop() throws ConnectionLostException {
+            try {
+                if(synct == true) {
+                    synct = false;
+                    a.write(false);
+                    float pulseSeconds = pulse.getDuration();
+                    freqHz = pulse.getFrequency();
+                    b.setDutyCycle(Con(targetFreqHz, freqHz));
+                   // b.setDutyCycle(1);
+                    UIActivity.upDate("RPM is: " + freqHz * 60 / 2);
+                    Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz +" TargetFrequency [Hz]"+targetFreqHz);
+                }
+
+            } catch (InterruptedException e) {
+                ioio_.disconnect();
+            }
+        }
+
 
         @Override
-        protected IOIOLooper createIOIOLooper() {
-            instance = new Looper();
-            return instance;
-            //return new Looper();
+        public void disconnected() {
+            System.out.println("IOIO has been disconnected");
         }
 
 
-
+        @Override
+        public void incompatible() {
+            System.out.println("Incompatible version of software");
+        }
     }
 
+    @Override
+    protected IOIOLooper createIOIOLooper() {
+        instance = new Looper();
+        return instance;
+        //return new Looper();
+    }
+
+
+
+}
 

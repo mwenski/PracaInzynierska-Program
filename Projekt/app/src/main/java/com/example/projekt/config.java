@@ -10,7 +10,7 @@ public class config {
     public static String readJSON(UIActivity context) {//parsuje
         String json = null;
         try {
-            InputStream in = context.getAssets().open("plik.json");
+            InputStream in = context.getAssets().open("constants.json");
             int size = in.available();
             byte[] bufor = new byte[size];
             in.read(bufor);
