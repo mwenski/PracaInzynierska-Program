@@ -1,6 +1,4 @@
-//
-// Created by John on 19/11/16.
-//
+
 
 #ifndef PROJEKT_CALIBRATION_H
 #define PROJEKT_CALIBRATION_H

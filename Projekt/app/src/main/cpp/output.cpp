@@ -1,6 +1,4 @@
-//
-// Moduł wyjściowy
-//
+
 
 #include "output.h"
 #include "config.h"

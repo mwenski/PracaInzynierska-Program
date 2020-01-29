@@ -1,6 +1,4 @@
-//
-// Created by John on 19/11/16.
-//
+
 #include"sensor.h"
 #include"calibration.h"
 #include <unistd.h>

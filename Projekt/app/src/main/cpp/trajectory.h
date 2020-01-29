@@ -1,6 +1,4 @@
-//
-// Created by John on 19/10/29.
-//
+
 
 #ifndef PROJEKT_TRAJECTORY_H
 #define PROJEKT_TRAJECTORY_H

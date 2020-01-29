@@ -90,15 +90,15 @@ public class MainActivity extends IOIOService {
                 synct = true;
             }
         }
-        //Funkcja inicjalizująca
+        //Funkcja inicjalizacji
         @Override
         protected void setup() throws ConnectionLostException {
             try {
                 instance=this;
                 Ini();
                 a = ioio_.openDigitalOutput(0,true);
-                b = ioio_.openPwmOutput(new DigitalOutput.Spec(14, DigitalOutput.Spec.Mode.OPEN_DRAIN), f_PWM);
-                DigitalInput.Spec Spek = new DigitalInput.Spec(11,DigitalInput.Spec.Mode.FLOATING);
+                b = ioio_.openPwmOutput(new DigitalOutput.Spec(11, DigitalOutput.Spec.Mode.OPEN_DRAIN), f_PWM);
+                DigitalInput.Spec Spek = new DigitalInput.Spec(14,DigitalInput.Spec.Mode.FLOATING);
                 pulse = ioio_.openPulseInput(Spek , PulseInput.ClockRate.RATE_250KHz,PulseInput.PulseMode.FREQ,true);
                 for(int p=0; p<3; p++) {
                     a.write(false);
@@ -117,7 +117,7 @@ public class MainActivity extends IOIOService {
             }
         }
 
-        //Funkcja działająca w pętli
+        //Funkcja pętli
         @Override
         public void loop() throws ConnectionLostException {
             try {
@@ -127,7 +127,6 @@ public class MainActivity extends IOIOService {
                     float pulseSeconds = pulse.getDuration();
                     freqHz = pulse.getFrequency();
                     b.setDutyCycle(Con(targetFreqHz, freqHz));
-                   // b.setDutyCycle(1);
                     UIActivity.upDate("RPM is: " + freqHz * 60 / 2);
                     Log.d("TACHOMETER READING", "Last impulse duration [s]: " + pulseSeconds + "; Frequency [Hz]: " + freqHz +" TargetFrequency [Hz]"+targetFreqHz);
                 }
@@ -154,7 +153,6 @@ public class MainActivity extends IOIOService {
     protected IOIOLooper createIOIOLooper() {
         instance = new Looper();
         return instance;
-        //return new Looper();
     }
 
 

@@ -1,6 +1,4 @@
-//
-// Created by John on 19/10/29.
-//
+
 #include <jni.h>
 #ifndef PROJEKT_CONFIG_H
 #define PROJEKT_CONFIG_H

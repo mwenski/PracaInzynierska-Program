@@ -30,8 +30,8 @@ public class UIActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         out = findViewById(R.id.tach_text);
-        Button buttonIn = findViewById(R.id.decreaser);
-        Button buttonDec = findViewById(R.id.increaser);
+        Button buttonDec = findViewById(R.id.decreaser);
+        Button buttonIn = findViewById(R.id.increaser);
         Button buttonStart = findViewById(R.id.buttonIOIO);
         config.load(this); //wczytaj
         buttonIn.setOnClickListener(new View.OnClickListener() {

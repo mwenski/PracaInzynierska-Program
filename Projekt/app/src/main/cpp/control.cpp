@@ -1,6 +1,3 @@
-//
-// Created by John on 19/12/09.
-//
 
 #include "control.h"
 PID::PID(float p, float i, float d, float t)

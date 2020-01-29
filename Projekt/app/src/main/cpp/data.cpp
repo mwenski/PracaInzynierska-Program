@@ -1,13 +1,11 @@
-//
-// Created by John on 19/11/16.
-//
+
 #include"sensor.h"
 #include"data.h"
 #include <unistd.h>
 #include "config.h"
 #include<math.h>
 Six_state::Six_state() {
-zero();
+    zero();
 }
 void Six_state::zero() {
     for (int i = 0; i < 3; i++) {
@@ -18,11 +16,11 @@ void Six_state::zero() {
 void Six_state::transformFrame(Matrix<float,4,4> A) //transformuj wspolrzedne do danego ukladu odniesienia
 {
 
-        xyz[0] = A*xyz[0];
-        xyz[1](3) = 0;
-        xyz[2](3) = 0;
-        xyz[1] = A*xyz[1];
-        xyz[2] = A*xyz[2];
+    xyz[0] = A*xyz[0];
+    xyz[1](3) = 0;
+    xyz[2](3) = 0;
+    xyz[1] = A*xyz[1];
+    xyz[2] = A*xyz[2];
 
 
 };
@@ -42,7 +40,7 @@ void Reading::setOffset(Matrix<float,4,1> a)
     offset = a;
 }
 Matrix<float,4,1> Reading::getWithOffset() {
-   return val + offset;
+    return val + offset;
 }
 Reading::Reading()
 {
@@ -61,7 +59,7 @@ void Reading::set(Vector4 a)
 }
 void Reading::set(Matrix<float,4,1> a)
 {
-val = a;
+    val = a;
 }
 
 void Reading::zero()
@@ -185,18 +183,14 @@ void Reading::cal(int a,ASensorEventQueue* ev){
     sr.x = sr.x / num_samples;
     sr.y = sr.y / num_samples;
     sr.z = sr.z / num_samples;
-    //odchylenie standardowe
+
     Vector4 odchylenie= Vector4(0,0,0);
-    Vector4 zmienna= Vector4(0,0,0);
-    for (int i = 0; i < num_samples; i++) {
-        zmienna.x += pow(rv[i].x - sr.x, 2);
-        zmienna.y += pow(rv[i].y - sr.y, 2);
-        zmienna.z += pow(rv[i].z - sr.z, 2);
-    }
-    odchylenie.x = -sqrtf(zmienna.x / num_samples)- sr.x;
-    odchylenie.y = -sqrtf(zmienna.y / num_samples)- sr.y;
-    odchylenie.z = -sqrtf(zmienna.z / num_samples)- sr.z;/////- sr.z
+    odchylenie.x = - sr.x;
+    odchylenie.y = - sr.y;
+    odchylenie.z = - sr.z;
     setOffset(odchylenie);
 }
+
+
 
 
