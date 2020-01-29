@@ -185,12 +185,11 @@ void Reading::cal(int a,ASensorEventQueue* ev){
     sr.x = sr.x / num_samples;
     sr.y = sr.y / num_samples;
     sr.z = sr.z / num_samples;
-    //odchylenie standardowe
-    Vector4 odchylenie= Vector4(0,0,0);
 
+    Vector4 odchylenie= Vector4(0,0,0);
     odchylenie.x = - sr.x;
     odchylenie.y = - sr.y;
-    odchylenie.z = - sr.z;/////- sr.z
+    odchylenie.z = - sr.z;
     setOffset(odchylenie);
 }
 
