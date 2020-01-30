@@ -1,6 +1,3 @@
-//
-// Created by John on 19/12/09.
-//
 
 #include "control.h"
 PID::PID(float p, float i, float d, float t)
@@ -9,6 +6,8 @@ PID::PID(float p, float i, float d, float t)
     Ki=i;
     Kd=d;
     T=t;
+    memd = 0;
+    memi = 0;
 }
 void PID::setParams(float p, float i, float d, double t)
 {
@@ -25,8 +24,8 @@ void PID::clearMemory()
 float PID::run(float in){
 
     float ret;
-    memi+= in*(T/1000);
-    ret = memi*Ki + in*Kp + ((in-memd)/(T/1000))*Kd;
+    memi+= in*(T/1000.0);
+    ret = memi*Ki + in*Kp + ((in-memd)/(T/1000.0))*Kd;
     memd = in;
     return ret;
 }

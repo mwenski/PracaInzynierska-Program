@@ -12,10 +12,13 @@
 #include"data.h"
 #include"trajectory.h"
 #include "control.h"
+#include "output.h"
 #include <pthread.h>
 #include <time.h>
 //czas w ms
 ASensorEventQueue* eventQ[4];
+JNIEnv *jenv;
+jobject jobj;
 static double now_ms(void) {
 
     struct timespec res;
@@ -23,9 +26,8 @@ static double now_ms(void) {
     return 1000.0 * res.tv_sec + (double) res.tv_nsec / 1e6;
 
 }
-//pentla regulacji
+//pętla regulacji
 void *perform_work(void *arguments) {
-
     double tim = now_ms();
 
     PID first = PID(1, 1, 1, 100);
@@ -48,40 +50,44 @@ void *perform_work(void *arguments) {
     }
 
 }
-
+PID *first;
+float con(float in, float sens)
+{
+float u = first->run( in - sens);
+__android_log_print(ANDROID_LOG_INFO, "MainActivity", " U IS %f",
+  u);
+if(u>1) u = 1;
+if(u<0) u = 0;
+return u;
+}
 extern "C" {
+JNIEXPORT jfloat JNICALL
+Java_com_example_projekt_MainActivity_Con(
+        JNIEnv *env,
+        jobject /* this */,
+        jfloat in, jfloat read) {
+   // float readfromC = requestTach(jenv,jobj);
+    __android_log_print(ANDROID_LOG_INFO, "MainActivity", " in IS %f, read IS %f",
+                        in,read);
+    return con(in,read);
+
+}
 JNIEXPORT void JNICALL
 Java_com_example_projekt_MainActivity_Ini(
         JNIEnv *env,
-jobject /* this */) {
+jobject obj /* this */) {
+jenv = env;
+jobj = obj;
+Tp =100;
+first = new PID(0.01,0.01, 0.0001, Tp);
     initialization_manager(); //zawsze na początku
    const char *b = getSensorList().c_str();
     __android_log_print(ANDROID_LOG_INFO, "MainActivity", "%s", b);
-    Matrix<float,4,4> al;
-    al = al.Zero();
-    al(0,0)= 1;
-    al(1,1) = 1;
-    al(2,2) = 1;
-    al(3,3) = 1;
-    Matrix<float,4,1> der;
-    der << 2,3,4,0;
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der(0),der(1),der(2));
-    der = al*der;
-    Matrix<float,2,2> alr;
-    alr = alr.Zero();
-    alr(0,0) = 1;
-    alr(1,1) = 2;
-
-    MatrixXf ab = alr.inverse();
-    Matrix<float,4,1> das = der;
-    der(0) = das(2);//3
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "VECTOR IS %f %f %f", der(0),der(1),der(2));
-    __android_log_print(ANDROID_LOG_INFO, "MainActivity", "MATRIX IS %f %f /n %f %f", ab(0,0),ab(0,1),ab(1,0), ab(1,1));
-
-    eventQ[0] = initialization_acceleration(0x01);
+eventQ[0] = initialization_acceleration(0x01);
 eventQ[1] = initialization_gyroscope(0x01);
 eventQ[2] = initialization_rotation(0x01);
 eventQ[3] = initialization_magnetic(0x01);
+
 
 }
 JNIEXPORT void JNICALL

@@ -1,0 +1,26 @@
+[
+  {
+    "komentarz": "wybieramy odczyt z akcelerometru 1 z grawitacją 2 bez grawitacji",
+    "name": "grawitation",
+    "number" : 2
+  },
+  {
+    "komentarz": "Częstotliwość sygnału PWM na wyjście pinów IOIO (w Hz)",
+    "name": "f_PWM",
+    "number" : 100
+  },
+  {
+    "komentarz": "...",
+    "name": "nazwa3",
+    "number" : 3
+  },
+  {
+    "komentarz": "...",
+    "name": "nazwa4",
+    "number" : 4
+  },
+  {
+    "komentarz": "...",
+    "name": "nazwa5",
+    "number" : 5
+  }]

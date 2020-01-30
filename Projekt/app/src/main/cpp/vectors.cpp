@@ -1,6 +1,4 @@
-//
-// Created by John on 19/11/27.
-//
+
 #include "vectors.h"
 #include <algorithm>
 Vector4 Vector4::operator+(Vector4 &a)

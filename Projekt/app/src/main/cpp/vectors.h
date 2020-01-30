@@ -1,6 +1,4 @@
-//
-// Created by John on 19/11/27.
-//
+
 
 #ifndef PROJEKT_VECTORS_H
 #define PROJEKT_VECTORS_H
